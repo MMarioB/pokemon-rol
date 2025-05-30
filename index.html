@@ -37,6 +37,9 @@
 
         html {
             overflow-x: hidden;
+            /* Scroll Snap (experimental) */
+            scroll-snap-type: y proximity;
+            /* O 'mandatory' para forzar más el snap */
         }
 
         body {
@@ -49,7 +52,94 @@
             background-blend-mode: multiply;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
             position: relative;
+            opacity: 0;
+            /* Ocultar todo el contenido hasta que el preloader termine */
+            transition: opacity 1s ease-in-out;
         }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-void-dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+            visibility: visible;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #preloader-text {
+            margin-top: 20px;
+            animation: pulse-preloader-text 2s infinite alternate;
+        }
+
+        @keyframes pulse-preloader-text {
+            from {
+                opacity: 0.7;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .double-bounce1,
+        .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--color-accent-gold);
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            animation-delay: -1.0s;
+        }
+
+        @keyframes sk-bounce {
+
+            0%,
+            100% {
+                transform: scale(0.0);
+            }
+
+            50% {
+                transform: scale(1.0);
+            }
+        }
+
 
         .container {
             max-width: 1400px;
@@ -71,6 +161,11 @@
             color: var(--color-text-light);
             opacity: 0;
             transform: translateY(20px);
+            /* Scroll Snap */
+            scroll-snap-align: start;
+            /* O 'center' */
+            scroll-padding-top: 100px;
+            /* Para que el sticky header no oculte la sección */
         }
 
         .content-section.animated {
@@ -134,7 +229,6 @@
             text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 175, 55, 0.2);
             overflow: hidden;
             position: relative;
-            /* Para el brillo */
         }
 
         /* Efecto de Brillo Sutil en Títulos */
@@ -143,20 +237,18 @@
             position: absolute;
             top: 0;
             left: -100%;
-            /* Empieza fuera de la vista */
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 80%, transparent);
             transform: skewX(-20deg);
-            /* Inclina la luz */
             animation: none;
-            /* Controlado por JS */
             opacity: 0;
+            pointer-events: none;
+            /* Asegura que no bloquee interacciones de texto */
         }
 
         .glow-on-view.active-glow::after {
             animation: title-glow 1.5s forwards ease-out;
-            /* Animación de brillo */
             opacity: 1;
         }
 
@@ -275,7 +367,6 @@
         }
 
         .content-section#habilidades ul li.revealed {
-            /* Clase añadida por JS */
             opacity: 1;
             transform: translateY(0);
         }
@@ -284,7 +375,6 @@
         .content-section#habilidades ul li.revealed .diamond-icon {
             animation: diamond-sparkle 0.8s ease-out forwards;
             display: inline-block;
-            /* Asegura que la rotación se aplique correctamente */
             transform-origin: center center;
         }
 
@@ -323,7 +413,6 @@
         }
 
         .nav-link:focus-visible {
-            /* Estilo de foco para accesibilidad */
             outline: 2px solid var(--color-accent-gold);
             outline-offset: 2px;
         }
@@ -379,10 +468,10 @@
 
         /* Hero Section - Mejora de carga de imagen de fondo + efecto de oscurecimiento */
         .hero-section {
-            background-color: rgba(0, 0, 0, 0.8);
-            /* LQIP de color */
-            background-image: url("imagen1.jpg");
-            /* La imagen real se carga encima */
+            background-color: var(--color-void-dark);
+            /* Color de fallback/placeholder */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a1a"/></svg>');
+            /* Pequeña imagen SVG de placeholder */
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -395,15 +484,42 @@
             border-bottom: 5px solid var(--color-accent-gold);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
             perspective: 1000px;
-            /* transicion para background-image al cargar: JS lo hará con una clase */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1a1a1a"/></svg>');
-            /* Placeholder oscuro */
+            transition: background-image 1s ease-in-out;
+            /* Transición suave cuando la verdadera imagen carga */
+            /* Scroll snap */
+            scroll-snap-align: start;
+            scroll-padding-top: 0;
         }
 
         .hero-section.image-loaded {
             background-image: url('imagen1.jpg');
-            transition: background-image 1s ease-in-out;
-            /* Transición suave de la imagen */
+        }
+
+        /* Efecto de niebla adicional en el Hero */
+        .hero-fog-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top left, transparent 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.7) 100%);
+            mix-blend-mode: overlay;
+            /* Interesante efecto de mezcla */
+            opacity: 0.6;
+            animation: fog-drift 60s linear infinite alternate;
+            pointer-events: none;
+            z-index: 1;
+            /* Por encima de las partículas, por debajo del contenido */
+        }
+
+        @keyframes fog-drift {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(50px, 50px);
+            }
         }
 
         .hero-overlay {
@@ -425,7 +541,6 @@
         /* Efecto de desvanecimiento para texto en Hero al scroll */
         .hero-fade-text {
             transition: opacity 0s, transform 0s;
-            /* Controlado por JS, no CSS smoothing */
         }
 
         /* Partículas de fondo (Hero y Footer) */
@@ -489,7 +604,6 @@
 
         .gallery-item.tilt-active {
             transition: none;
-            /* Desactiva la transición para el movimiento del tilt */
         }
 
         .gallery-item.tilt-active img {
@@ -497,7 +611,6 @@
             border-color: var(--color-accent-gold);
             filter: grayscale(0%) contrast(100%) brightness(100%);
             transition: transform 0.1s linear;
-            /* Muy rápido para el movimiento */
         }
 
         /* Footer: Columna de cierre */
@@ -514,6 +627,9 @@
             position: relative;
             overflow: hidden;
             z-index: 0;
+            /* Scroll snap */
+            scroll-snap-align: start;
+            scroll-padding-top: 100px;
         }
 
         /* Pantalla de inicio - Temática revisada */
@@ -542,7 +658,6 @@
                 0.05em 0 0 rgba(255, 0, 0, 0.75),
                 -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
                 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-            /* Elimina el shadow original si usas este */
         }
 
         @keyframes glitch-text {
@@ -607,6 +722,13 @@
             background-color: #E2BF65;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 12px var(--color-accent-gold);
             transform: translateY(-2px);
+
+            /* Feedback háptico */
+            @media (pointer: coarse) {
+                /* Solo en dispositivos con pantalla táctil */
+                -webkit-tap-highlight-color: transparent;
+                /* iOS, elimina el overlay azul */
+            }
         }
 
         #start-button:active {
@@ -762,7 +884,16 @@
     </style>
 </head>
 
-<body class="antialiased">
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        <div id="preloader-text">Cargando orbes antiguos...</div>
+    </div>
+
     <!-- Scroll Progress Indicator -->
     <div id="scroll-progress"></div>
 
@@ -776,6 +907,8 @@
     <!-- Sección Hero: Entrada Principal al Expediente -->
     <section class="hero-section" id="hero" role="region" aria-label="Introducción a Marco Aurelio">
         <div class="hero-overlay absolute inset-0"></div>
+        <!-- Efecto Niebla/Atmósfera en Hero -->
+        <div class="hero-fog-overlay"></div>
         <!-- Partículas de fondo en Hero -->
         <div class="particles-container"></div>
         <div class="hero-content relative z-10">
@@ -823,7 +956,7 @@
                         <p><strong class="font-semibold text-accent">APELATIVO:</strong> "El Custodio de Pergaminos",
                             "Mano Fina"</p>
                         <p><strong class="font-semibold text-accent">EDAD:</strong> 27 años</p>
-                        <p><strong class="font-semibold text-accent">DIVISIÓN:</strong> Exploradores del Orbis (Unidad
+                        <p><strong class="font-semibold text-accent">DIVISIÓN: </strong>Exploradores del Orbis (Unidad
                             de Investigación y Recuperación)</p>
                         <p class="text-quote">"Cada fragmento de información, cada línea escrita, es un eslabón vital en
                             la cadena de la verdad imperial; y yo soy su guardián."</p>
@@ -987,13 +1120,12 @@
 
     <!-- Back to Top Button -->
     <button id="back-to-top" aria-label="Volver al inicio de la página">
-        &#9650; <!-- Flecha hacia arriba como carácter HTML -->
+        &#9650;
     </button>
 
     <!-- Audio para sonido ambiental -->
     <audio id="ambient-audio" loop preload="auto">
-        <!-- Puedes usar un sonido sutil de fondo, como susurros antiguos o algo ambiental -->
-        <!-- Asegúrate de tener un archivo de audio (ej: .mp3, .ogg) en la misma carpeta o con un path válido -->
+        <!-- Asegúrate de cambiar esto a un archivo de audio real o eliminarlo si no lo usas -->
         <source src="ancient_whispers.mp3" type="audio/mp3">
         Tu navegador no soporta el elemento de audio.
     </audio>
@@ -1006,6 +1138,7 @@
     <!-- Script para animaciones y navegación -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
             const introScreen = document.getElementById('intro-screen');
             const startButton = document.getElementById('start-button');
             const heroSection = document.getElementById('hero');
@@ -1017,112 +1150,172 @@
             const ambientAudio = document.getElementById('ambient-audio');
             const audioControl = document.getElementById('audio-control');
 
-            let lastClickedNavLink = null; // Para guardar la última sección clickeada
+            let lastClickedNavLink = null;
+            let userInteracted = false;
+            let audioVolume = 0.3; // Volumen inicial de la música ambiental
+            ambientAudio.volume = audioVolume;
+
+            // --- Preloader ---
+            const imagesToLoad = document.querySelectorAll('img[loading="lazy"], .hero-section');
+            const totalResources = imagesToLoad.length;
+            let loadedResources = 0;
+
+            const incrementLoader = () => {
+                loadedResources++;
+                if (loadedResources === totalResources) {
+                    setTimeout(() => {
+                        preloader.classList.add('hidden');
+                        document.body.classList.add('loaded'); // Mostrar contenido de la página
+                        // Disparar la interacción inicial del usuario para intentar reproducir audio
+                        handleFirstUserInteraction(); // Llama a la función al finalizar la carga
+                    }, 500); // Pequeño delay de gracia
+                }
+            };
+
+            // Para imágenes 'loading="lazy"', el evento 'load' no siempre se dispara hasta que entran en la vista.
+            // Para una precarga más fiable, podríamos cargar una por una con Image().
+            // Pero para este ejemplo, vamos a simular la carga o usar load para las que lo soporten
+            if (totalResources === 0) { // Si no hay recursos que esperar, ocultar inmediatamente
+                incrementLoader();
+            } else {
+                imagesToLoad.forEach(item => {
+                    // Cargar imagen de fondo del hero explícitamente
+                    if (item.classList.contains('hero-section')) {
+                        const heroImage = new Image();
+                        heroImage.src = 'imagen1.jpg';
+                        heroImage.onload = () => {
+                            item.classList.add('image-loaded'); // Aplica la imagen de fondo
+                            incrementLoader();
+                        };
+                        heroImage.onerror = () => { // Manejo de error para la imagen del hero
+                            console.error('Error loading hero image');
+                            incrementLoader(); // Continúa incluso si falla la carga de una imagen
+                        };
+                    } else if (item.tagName === 'IMG') {
+                        // Crear un nuevo Image para cargar el src y escuchar el evento load
+                        const tempImg = new Image();
+                        tempImg.src = item.src;
+                        tempImg.onload = incrementLoader;
+                        tempImg.onerror = incrementLoader; // Asegurarse de que el contador avance incluso en errores
+                    }
+                });
+            }
+
 
             // --- Utilidades ---
-            function splitTextIntoWords(element, className = 'text-reveal-word') {
+            function splitTextIntoWords(element) {
                 const text = element.textContent;
-                element.innerHTML = '';
+                element.innerHTML = ''; // Limpiar el contenido actual
                 const words = text.split(' ').filter(word => word.length > 0);
                 words.forEach(word => {
                     const wordSpan = document.createElement('span');
-                    wordSpan.textContent = word + ' '; // Añadir espacio de vuelta
+                    wordSpan.textContent = word + ' ';
+                    wordSpan.style.whiteSpace = 'nowrap'; // Evita que las palabras se rompan
                     element.appendChild(wordSpan);
                 });
-                element.classList.add(className);
             }
 
             function generateRandom(min, max) {
                 return Math.random() * (max - min) + min;
             }
 
-            // --- Control de Audio Ambiental ---
-            let isAudioPlaying = false;
-            let userInteracted = false; // Flag para saber si el usuario ha interactuado
+            // --- Feedback Háptico (Vibración) ---
+            function vibrate(duration = 50) {
+                if (navigator.vibrate) {
+                    navigator.vibrate(duration);
+                }
+            }
 
-            // Función para alternar audio
+
+            // --- Control de Audio Ambiental ---
             function toggleAudio() {
                 if (ambientAudio.paused) {
                     ambientAudio.play().then(() => {
                         audioControl.textContent = '🔊';
-                        isAudioPlaying = true;
                     }).catch(error => {
                         console.warn("Autoplay prevented:", error);
-                        // Mostrar mensaje de que se requiere interacción para el audio
-                        // o dejarlo en muted hasta que el usuario lo active
                         audioControl.textContent = '🔇';
-                        isAudioPlaying = false;
+                        if (audioControl.title === "Auto play blocked. Click to play.") {
+                            // ya se ha mostrado este mensaje, no hacer nada más
+                        } else {
+                            audioControl.title = "Auto play blocked. Click to play.";
+                            // alert("Tu navegador bloqueó el autoplay del audio. Haz clic en el icono para activarlo."); // Puedes usar un tooltip o alert
+                        }
                     });
                 } else {
                     ambientAudio.pause();
-                    audioControl.textContent = '🔊'; // Icono de sonido activo al pausar por si el usuario lo activa
-                    isAudioPlaying = false;
+                    audioControl.textContent = '🔇';
                 }
+                vibrate(20);
             }
 
-            // Click en el control de audio
             audioControl.addEventListener('click', toggleAudio);
 
             // Intentar reproducir el audio cuando se detecta la primera interacción del usuario
             function handleFirstUserInteraction() {
                 if (!userInteracted) {
                     userInteracted = true;
-                    // Intentar reproducir el audio. Esto ya lo controlaba toggleAudio.
-                    // Podemos ponerlo en play muted por defecto si no es posible el autoplay
-                    ambientAudio.muted = false; // Si se empieza clickando, desmutear
-                    toggleAudio(); // Intentar reproducir
-                    document.removeEventListener('click', handleFirstUserInteraction);
-                    document.removeEventListener('keydown', handleFirstUserInteraction);
+                    ambientAudio.muted = false; // Desmutear el audio
+                    toggleAudio(); // Llamar a toggle para intentar reproducir
+                    // Eliminar listeners para evitar múltiples invocaciones
+                    document.removeEventListener('click', handleFirstUserInteraction, { once: true });
+                    document.removeEventListener('keydown', handleFirstUserInteraction, { once: true });
+
+                    // Inicializar el volumen si no se pudo autoreproducir
+                    if (ambientAudio.paused && audioControl.textContent === '🔊') {
+                        // Si el audio está pausado pero el icono indica que debería estar sonando, significa que fue bloqueado.
+                        audioControl.textContent = '🔇';
+                        ambientAudio.muted = true;
+                    }
                 }
             }
 
-            document.addEventListener('click', handleFirstUserInteraction, { once: true });
-            document.addEventListener('keydown', handleFirstUserInteraction, { once: true });
+            // Listeners para la primera interacción del usuario
+            document.addEventListener('click', handleFirstUserInteraction, { once: true, passive: true });
+            document.addEventListener('keydown', handleFirstUserInteraction, { once: true, passive: true });
 
-            // Por si el autoplay no es posible
-            ambientAudio.muted = true; // Por defecto muteado
-            audioControl.textContent = '🔇'; // Icono de mute
+            // Ajuste de volumen del audio según el scroll
+            const adjustAudioVolume = () => {
+                const scrolled = window.scrollY;
+                const heroHeight = heroSection.offsetHeight;
+                let newVolume = audioVolume;
+
+                // Atenuar volumen al inicio/final de la página o en el hero
+                if (scrolled < heroHeight * 0.5) { // En la primera mitad del hero
+                    newVolume = audioVolume * (scrolled / (heroHeight * 0.5));
+                } else if (scrolled > document.body.scrollHeight - window.innerHeight - (heroHeight * 0.5)) { // Cerca del final
+                    newVolume = audioVolume * ((document.body.scrollHeight - window.innerHeight - scrolled) / (heroHeight * 0.5));
+                }
+                ambientAudio.volume = Math.max(0, Math.min(audioVolume, newVolume)); // Asegurar que el volumen esté entre 0 y audioVolume
+            };
+            window.addEventListener('scroll', adjustAudioVolume, { passive: true });
+
 
             // --- Pantalla de Bienvenida ---
             if (introScreen && startButton) {
-                const introTitle = introScreen.querySelector('h2.text-reveal-word');
+                const introTitle = introScreen.querySelector('h2'); // h2 ya tiene text-reveal-word
                 if (introTitle) {
-                    // Inicializar el título para animación de texto
                     splitTextIntoWords(introTitle);
-                    // Retraso para que el "glitch" y la animación de texto inicien juntos
                     setTimeout(() => {
-                        introTitle.classList.add('revealed'); // Inicia animación de texto
-                        // Opcional: Desactivar glitch al finalizar animación de revelado
-                        // introTitle.addEventListener('animationend', () => {
-                        //     introTitle.classList.remove('glitch-effect');
-                        // }, {once: true});
+                        introTitle.classList.add('revealed');
                     }, 500);
                 }
 
                 startButton.addEventListener('click', () => {
                     introScreen.classList.add('hidden');
-                    // Iniciar animación de los títulos del hero una vez que la pantalla de intro se oculta
                     const heroTitles = heroSection.querySelectorAll('.text-reveal-word');
-                    heroTitles.forEach((title, index) => {
-                        splitTextIntoWords(title); // Asegurarse de que el texto esté dividido
-                        setTimeout(() => {
-                            title.classList.add('revealed');
-                        }, index * 200 + 500); // Pequeño delay adicional para que no sea instantáneo tras la intro
-                    });
-                    // Intentar reproducir audio al entrar
-                    if (!userInteracted) { // Si el usuario no ha interactuado antes de clickar el botón
-                        ambientAudio.muted = false; // Desmutear
-                        ambientAudio.play().then(() => {
-                            audioControl.textContent = '🔊';
-                            isAudioPlaying = true;
-                        }).catch(error => {
-                            console.warn("Autoplay blocked, keeping audio muted:", error);
-                            audioControl.textContent = '🔇';
-                            ambientAudio.muted = true; // Mantener muteado si no se pudo auto-reproducir
-                            isAudioPlaying = false;
+                    heroTitles.forEach(title => splitTextIntoWords(title)); // Asegurar que el texto esté dividido
+
+                    // Animar los títulos del hero después de la intro
+                    setTimeout(() => {
+                        heroTitles.forEach((title, index) => {
+                            setTimeout(() => {
+                                title.classList.add('revealed');
+                            }, index * 200);
                         });
-                        userInteracted = true;
-                    }
+                    }, 0); // No hay retraso para que aparezcan justo después de la intro
+
+                    vibrate(50); // Feedback háptico al click en el botón de inicio
                 });
             }
 
@@ -1136,10 +1329,10 @@
                         // Animación de texto revelado para section-titles y efecto glow
                         const sectionTitle = entry.target.querySelector('.section-title');
                         if (sectionTitle) {
-                            if (!sectionTitle.classList.contains('text-reveal-word')) {
+                            if (!sectionTitle.classList.contains('text-reveal-word')) { // Asegura que solo se prepare una vez
                                 splitTextIntoWords(sectionTitle);
                             }
-                            if (!sectionTitle.classList.contains('revealed')) {
+                            if (!sectionTitle.classList.contains('revealed')) { // Solo anima si no ha sido revelado
                                 setTimeout(() => {
                                     sectionTitle.classList.add('revealed');
                                     sectionTitle.classList.add('active-glow'); // Activar el brillo
@@ -1186,17 +1379,17 @@
                 });
             };
 
-            window.addEventListener('scroll', highlightNavLink);
+            window.addEventListener('scroll', highlightNavLink, { passive: true });
             highlightNavLink();
 
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
+                    vibrate(10); // Feedback háptico al click en el navlink
                     const targetId = link.getAttribute('href').substring(1);
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                        // Eliminar clase `nav-target-active` de la sección anterior clickeada
                         if (lastClickedNavLink && lastClickedNavLink.targetSection) {
                             lastClickedNavLink.targetSection.classList.remove('nav-target-active');
                         }
@@ -1207,11 +1400,9 @@
                             behavior: 'smooth'
                         });
 
-                        // Marcar esta sección como la última clickeada para que reciba la animación
                         lastClickedNavLink = { link, targetSection };
                         targetSection.classList.add('nav-target-active');
 
-                        // Eliminar la clase después de la animación (usando una promesa para asegurar el 'once')
                         const handleAnimationEnd = () => {
                             targetSection.classList.remove('nav-target-active');
                             targetSection.removeEventListener('animationend', handleAnimationEnd);
@@ -1228,7 +1419,7 @@
                 const progressPercentage = (scrollPosition / totalHeight) * 100;
                 scrollProgress.style.width = `${progressPercentage}%`;
             };
-            window.addEventListener('scroll', updateScrollProgress);
+            window.addEventListener('scroll', updateScrollProgress, { passive: true });
             updateScrollProgress();
 
             // --- Efecto Paralaje Hero Section / Desvanecimiento Texto Hero ---
@@ -1246,18 +1437,8 @@
                     });
                 }
             };
-            window.addEventListener('scroll', applyParallaxAndFade);
+            window.addEventListener('scroll', applyParallaxAndFade, { passive: true });
             applyParallaxAndFade();
-
-            // --- Lazy Load de Imagen de Hero (Background Image) ---
-            const heroBgImg = new Image();
-            heroBgImg.src = heroSection.style.backgroundImage.slice(5, -2); // Extraer URL de la imagen de fondo
-            // heroBgImg.src = "imagen1.jpg"; // Si no quieres sacar la URL del CSS
-
-            heroBgImg.onload = () => {
-                heroSection.classList.add('image-loaded'); // Agrega la clase que tiene la transición
-            };
-
 
             // --- Back to Top Button ---
             const toggleBackToTopButton = () => {
@@ -1267,10 +1448,11 @@
                     backToTopButton.classList.remove('visible');
                 }
             };
-            window.addEventListener('scroll', toggleBackToTopButton);
+            window.addEventListener('scroll', toggleBackToTopButton, { passive: true });
             toggleBackToTopButton();
 
             backToTopButton.addEventListener('click', () => {
+                vibrate(10);
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -1278,27 +1460,23 @@
             });
 
             // --- Partículas de Fondo ---
-            function createParticles(containerElement, count, isFixed = false) {
+            function createParticles(containerElement, count) {
                 const particlesContainer = containerElement.querySelector('.particles-container');
                 if (!particlesContainer) return;
-
-                // Limpiar partículas existentes para evitar duplicados al recargar JS
                 particlesContainer.innerHTML = '';
 
                 for (let i = 0; i < count; i++) {
                     const particle = document.createElement('div');
                     particle.classList.add('particle');
-                    const size = generateRandom(0.8, 2); // ligeras variaciones de tamaño
-                    const delay = generateRandom(0, 15); // Variación del retraso de animación
-                    const duration = generateRandom(15, 30); // Variación de la duración
+                    const size = generateRandom(0.8, 2);
+                    const delay = generateRandom(0, 15);
+                    const duration = generateRandom(15, 30);
 
-                    // Asegurar que las partículas comiencen y terminen fuera de la vista
                     const startX = generateRandom(-10, 110);
                     const startY = generateRandom(-10, 110);
                     const endX = generateRandom(-20, 120);
                     const endY = generateRandom(-20, 120);
 
-                    // Pequeñas desviaciones para el punto medio
                     const midX = (startX + endX) / 2 + generateRandom(-20, 20);
                     const midY = (startY + endY) / 2 + generateRandom(-20, 20);
 
@@ -1327,10 +1505,11 @@
             galleryItems.forEach(item => {
                 const img = item.querySelector('img');
                 const MAX_ROTATION = 8;
-                const MAX_TRANSLATION_IMG = 10; // Traslación solo en la imagen, no en el item
-                const MAX_TRANSLATION_ITEM = 5; // Traslación del item entero (para simular profundidad)
+                const MAX_TRANSLATION_IMG = 10;
+                const MAX_TRANSLATION_ITEM = 5;
 
                 item.addEventListener('mousemove', (e) => {
+                    vibrate(1); // Pequeña vibracion al mover sobre item de galeria
                     const rect = item.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -1347,11 +1526,10 @@
                     const translateXItem = ((x - centerX) / centerX) * MAX_TRANSLATION_ITEM;
                     const translateYItem = ((y - centerY) / centerY) * MAX_TRANSLATION_ITEM;
 
-
                     item.style.transform = `translate(${translateXItem}px, ${translateYItem}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
                     img.style.transform = `translateX(${translateXImg}px) translateY(${translateYImg}px) scale(1.02)`;
                     item.classList.add('tilt-active');
-                });
+                }, { passive: true }); // {passive: true} para mejorar rendimiento en mobile
 
                 item.addEventListener('mouseleave', () => {
                     item.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg) scale(1)`;
