@@ -37,9 +37,7 @@
 
         html {
             overflow-x: hidden;
-            /* Scroll Snap (experimental) */
             scroll-snap-type: y proximity;
-            /* O 'mandatory' para forzar más el snap */
         }
 
         body {
@@ -50,16 +48,74 @@
             background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><pattern id="roman-mosaic" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h5v5H0zM5 5h5v5H5z" fill="%23101010" /><path d="M5 0h5v5H5zM0 5h5v5H0z" fillOpacity=".04" fill="%23666"/></pattern><rect width="100%" height="100%" fill="url(%23roman-mosaic)" /></svg>');
             background-attachment: fixed;
             background-blend-mode: multiply;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
+            /* Cursor personalizado */
+            cursor: none;
+            /* Oculta el cursor por defecto */
             position: relative;
             opacity: 0;
-            /* Ocultar todo el contenido hasta que el preloader termine */
             transition: opacity 1s ease-in-out;
+            cursor: pointer;
+            /* Fallback */
         }
 
         body.loaded {
             opacity: 1;
         }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 25px;
+            /* Tamaño del cursor */
+            height: 25px;
+            background-color: var(--color-accent-gold);
+            /* Color del cursor */
+            border-radius: 50%;
+            pointer-events: none;
+            /* Asegura que el cursor no interfiera con otros elementos */
+            transform: translate(-50%, -50%);
+            /* Centra el cursor en el puntero */
+            transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+            mix-blend-mode: exclusion;
+            /* Para un efecto visual interesante sobre diferentes fondos */
+            z-index: 10000;
+        }
+
+        #custom-cursor.faded {
+            opacity: 0.5;
+            /* Opacidad para el rastro o cuando no hay interacción */
+        }
+
+        /* Efecto de destello o rastro al moverse */
+        #custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            /* Color del rastro */
+            animation: cursor-trail 0.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes cursor-trail {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
 
         /* Preloader */
         #preloader {
@@ -80,7 +136,8 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
             opacity: 1;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            /* Transición más larga para el desvanecimiento */
             visibility: visible;
         }
 
@@ -161,11 +218,8 @@
             color: var(--color-text-light);
             opacity: 0;
             transform: translateY(20px);
-            /* Scroll Snap */
             scroll-snap-align: start;
-            /* O 'center' */
             scroll-padding-top: 100px;
-            /* Para que el sticky header no oculte la sección */
         }
 
         .content-section.animated {
@@ -244,7 +298,6 @@
             animation: none;
             opacity: 0;
             pointer-events: none;
-            /* Asegura que no bloquee interacciones de texto */
         }
 
         .glow-on-view.active-glow::after {
@@ -367,6 +420,7 @@
         }
 
         .content-section#habilidades ul li.revealed {
+            /* Clase añadida por JS */
             opacity: 1;
             transform: translateY(0);
         }
@@ -469,9 +523,7 @@
         /* Hero Section - Mejora de carga de imagen de fondo + efecto de oscurecimiento */
         .hero-section {
             background-color: var(--color-void-dark);
-            /* Color de fallback/placeholder */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a1a"/></svg>');
-            /* Pequeña imagen SVG de placeholder */
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a1a"/></svg>');
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -484,15 +536,21 @@
             border-bottom: 5px solid var(--color-accent-gold);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
             perspective: 1000px;
-            transition: background-image 1s ease-in-out;
-            /* Transición suave cuando la verdadera imagen carga */
-            /* Scroll snap */
+            transition: background-image 1s ease-in-out, filter 1s ease-in-out;
             scroll-snap-align: start;
             scroll-padding-top: 0;
+            filter: blur(5px);
+            /* Estado inicial borroso */
+            transform: scale(1.05);
+            /* Ligeramente escalado para que el blur no muestre bordes negros */
         }
 
         .hero-section.image-loaded {
             background-image: url('imagen1.jpg');
+            filter: blur(0px);
+            /* Nítido al cargar */
+            transform: scale(1);
+            /* Vuelve al tamaño normal */
         }
 
         /* Efecto de niebla adicional en el Hero */
@@ -504,12 +562,10 @@
             height: 100%;
             background: radial-gradient(circle at top left, transparent 0%, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.7) 100%);
             mix-blend-mode: overlay;
-            /* Interesante efecto de mezcla */
             opacity: 0.6;
             animation: fog-drift 60s linear infinite alternate;
             pointer-events: none;
             z-index: 1;
-            /* Por encima de las partículas, por debajo del contenido */
         }
 
         @keyframes fog-drift {
@@ -600,6 +656,14 @@
             display: block;
             width: 100%;
             pointer-events: none;
+            filter: blur(3px);
+            /* Blur inicial para el efecto progresivo de carga */
+            transition: filter 0.8s ease-out, transform 0.4s ease-in-out;
+        }
+
+        .gallery-item img.loaded {
+            filter: blur(0px);
+            /* Nítido al cargar */
         }
 
         .gallery-item.tilt-active {
@@ -627,7 +691,6 @@
             position: relative;
             overflow: hidden;
             z-index: 0;
-            /* Scroll snap */
             scroll-snap-align: start;
             scroll-padding-top: 100px;
         }
@@ -646,7 +709,8 @@
             width: 100%;
             height: 100%;
             z-index: 1000;
-            transition: opacity 0.7s ease-in-out;
+            transition: opacity 0.8s ease-in-out;
+            /* Más tiempo para la desintegración */
             color: var(--color-text-light);
             perspective: 1000px;
         }
@@ -702,6 +766,33 @@
             }
         }
 
+        /* Efecto de Desintegración para la intro screen */
+        #intro-screen.disintegrate {
+            animation: disintegrate-out 0.8s forwards;
+            backdrop-filter: blur(0px);
+            /* Elimina el blur para que se vea el efecto */
+        }
+
+        @keyframes disintegrate-out {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(0.9);
+                filter: blur(3px);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+                filter: blur(10px);
+            }
+        }
+
         #start-button {
             background-color: var(--color-accent-gold);
             color: var(--color-void-dark);
@@ -722,13 +813,6 @@
             background-color: #E2BF65;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 12px var(--color-accent-gold);
             transform: translateY(-2px);
-
-            /* Feedback háptico */
-            @media (pointer: coarse) {
-                /* Solo en dispositivos con pantalla táctil */
-                -webkit-tap-highlight-color: transparent;
-                /* iOS, elimina el overlay azul */
-            }
         }
 
         #start-button:active {
@@ -885,6 +969,9 @@
 </head>
 
 <body>
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
     <!-- Preloader -->
     <div id="preloader">
         <div class="spinner">
@@ -1125,8 +1212,12 @@
 
     <!-- Audio para sonido ambiental -->
     <audio id="ambient-audio" loop preload="auto">
-        <!-- Asegúrate de cambiar esto a un archivo de audio real o eliminarlo si no lo usas -->
         <source src="ancient_whispers.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <!-- Audio para feedback de clicks -->
+    <audio id="click-sound" preload="auto">
+        <source src="click_sound.mp3" type="audio/mp3">
         Tu navegador no soporta el elemento de audio.
     </audio>
 
@@ -1148,12 +1239,82 @@
             const navLinks = document.querySelectorAll('.nav-link');
             const header = document.querySelector('header');
             const ambientAudio = document.getElementById('ambient-audio');
+            const clickSound = document.getElementById('click-sound'); // Nuevo elemento de audio
             const audioControl = document.getElementById('audio-control');
+            const customCursor = document.getElementById('custom-cursor'); // Nuevo cursor
 
             let lastClickedNavLink = null;
             let userInteracted = false;
-            let audioVolume = 0.3; // Volumen inicial de la música ambiental
+            let audioVolume = 0.3;
             ambientAudio.volume = audioVolume;
+            clickSound.volume = 0.5; // Volumen del sonido de click
+
+            // --- Custom Cursor ---
+            const enableCustomCursor = !('ontouchstart' in window || navigator.maxTouchPoints); // Solo si no es táctil
+            if (enableCustomCursor) {
+                document.body.style.cursor = 'none'; // Oculta el cursor por defecto
+                customCursor.style.display = 'block';
+
+                let cursorX = 0;
+                let cursorY = 0;
+                let isMoving = false;
+                let fadeTimeout;
+
+                document.addEventListener('mousemove', (e) => {
+                    cursorX = e.clientX;
+                    cursorY = e.clientY;
+                    if (!isMoving) {
+                        requestAnimationFrame(moveCursor);
+                        isMoving = true;
+                    }
+                    customCursor.classList.remove('faded');
+                    clearTimeout(fadeTimeout);
+                    fadeTimeout = setTimeout(() => {
+                        customCursor.classList.add('faded');
+                    }, 500);
+
+                    // Recrear el rastro al moverse
+                    const trailElement = document.createElement('div');
+                    trailElement.className = 'cursor-trail-effect'; // Clase para CSS
+                    customCursor.appendChild(trailElement);
+                    setTimeout(() => trailElement.remove(), 500); // Eliminar después de la animación
+                });
+
+                function moveCursor() {
+                    customCursor.style.left = `${cursorX}px`;
+                    customCursor.style.top = `${cursorY}px`;
+                    isMoving = false;
+                }
+
+                // Añadir efecto de rastro (generado por CSS) en el custom-cursor::after
+                // No necesitamos JS para esto, pero el listener de mousemove activa la visibilidad.
+                // CSS para el efecto de rastro del cursor
+                const customCursorStyle = document.createElement('style');
+                customCursorStyle.textContent = `
+                    #custom-cursor.faded { opacity: 0.5; }
+                    #custom-cursor::before { /* Duplica el efecto de rastro */
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        background-color: rgba(255, 255, 255, 0.1);
+                        animation: cursor-trail-fade 0.5s forwards;
+                    }
+                    @keyframes cursor-trail-fade {
+                         0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+                         100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+                    }
+                    `;
+                document.head.appendChild(customCursorStyle);
+
+
+            } else {
+                customCursor.style.display = 'none'; // ocultar en dispositivos táctiles
+            }
 
             // --- Preloader ---
             const imagesToLoad = document.querySelectorAll('img[loading="lazy"], .hero-section');
@@ -1166,16 +1327,12 @@
                     setTimeout(() => {
                         preloader.classList.add('hidden');
                         document.body.classList.add('loaded'); // Mostrar contenido de la página
-                        // Disparar la interacción inicial del usuario para intentar reproducir audio
-                        handleFirstUserInteraction(); // Llama a la función al finalizar la carga
-                    }, 500); // Pequeño delay de gracia
+                        handleFirstUserInteraction(); // Disparar la interacción inicial del usuario
+                    }, 500);
                 }
             };
 
-            // Para imágenes 'loading="lazy"', el evento 'load' no siempre se dispara hasta que entran en la vista.
-            // Para una precarga más fiable, podríamos cargar una por una con Image().
-            // Pero para este ejemplo, vamos a simular la carga o usar load para las que lo soporten
-            if (totalResources === 0) { // Si no hay recursos que esperar, ocultar inmediatamente
+            if (totalResources === 0) {
                 incrementLoader();
             } else {
                 imagesToLoad.forEach(item => {
@@ -1187,30 +1344,37 @@
                             item.classList.add('image-loaded'); // Aplica la imagen de fondo
                             incrementLoader();
                         };
-                        heroImage.onerror = () => { // Manejo de error para la imagen del hero
+                        heroImage.onerror = () => {
                             console.error('Error loading hero image');
-                            incrementLoader(); // Continúa incluso si falla la carga de una imagen
+                            incrementLoader();
                         };
                     } else if (item.tagName === 'IMG') {
-                        // Crear un nuevo Image para cargar el src y escuchar el evento load
+                        // Progressive Image Loading: Cargar la imagen y quitar el blur al finalizar
                         const tempImg = new Image();
-                        tempImg.src = item.src;
-                        tempImg.onload = incrementLoader;
-                        tempImg.onerror = incrementLoader; // Asegurarse de que el contador avance incluso en errores
+                        tempImg.src = item.src; // item.src porque ya tienes loading="lazy" en el HTML
+                        tempImg.onload = () => {
+                            item.classList.add('loaded'); // Remueve el blur
+                            incrementLoader();
+                        };
+                        tempImg.onerror = () => {
+                            console.error('Error loading gallery image:', item.src);
+                            item.classList.add('loaded'); // Asegura que el blur se quite incluso si hay error
+                            incrementLoader();
+                        };
                     }
                 });
             }
 
-
             // --- Utilidades ---
             function splitTextIntoWords(element) {
                 const text = element.textContent;
-                element.innerHTML = ''; // Limpiar el contenido actual
+                element.innerHTML = '';
                 const words = text.split(' ').filter(word => word.length > 0);
-                words.forEach(word => {
+                words.forEach((word, index) => {
                     const wordSpan = document.createElement('span');
                     wordSpan.textContent = word + ' ';
-                    wordSpan.style.whiteSpace = 'nowrap'; // Evita que las palabras se rompan
+                    wordSpan.style.setProperty('--word-index', index); // Para posibles animaciones por palabra
+                    wordSpan.style.whiteSpace = 'nowrap';
                     element.appendChild(wordSpan);
                 });
             }
@@ -1221,7 +1385,7 @@
 
             // --- Feedback Háptico (Vibración) ---
             function vibrate(duration = 50) {
-                if (navigator.vibrate) {
+                if ('vibrate' in navigator) {
                     navigator.vibrate(duration);
                 }
             }
@@ -1235,12 +1399,7 @@
                     }).catch(error => {
                         console.warn("Autoplay prevented:", error);
                         audioControl.textContent = '🔇';
-                        if (audioControl.title === "Auto play blocked. Click to play.") {
-                            // ya se ha mostrado este mensaje, no hacer nada más
-                        } else {
-                            audioControl.title = "Auto play blocked. Click to play.";
-                            // alert("Tu navegador bloqueó el autoplay del audio. Haz clic en el icono para activarlo."); // Puedes usar un tooltip o alert
-                        }
+                        audioControl.title = "Auto play blocked. Click to play.";
                     });
                 } else {
                     ambientAudio.pause();
@@ -1251,22 +1410,13 @@
 
             audioControl.addEventListener('click', toggleAudio);
 
-            // Intentar reproducir el audio cuando se detecta la primera interacción del usuario
             function handleFirstUserInteraction() {
                 if (!userInteracted) {
                     userInteracted = true;
-                    ambientAudio.muted = false; // Desmutear el audio
-                    toggleAudio(); // Llamar a toggle para intentar reproducir
-                    // Eliminar listeners para evitar múltiples invocaciones
+                    ambientAudio.muted = false;
+                    toggleAudio();
                     document.removeEventListener('click', handleFirstUserInteraction, { once: true });
                     document.removeEventListener('keydown', handleFirstUserInteraction, { once: true });
-
-                    // Inicializar el volumen si no se pudo autoreproducir
-                    if (ambientAudio.paused && audioControl.textContent === '🔊') {
-                        // Si el audio está pausado pero el icono indica que debería estar sonando, significa que fue bloqueado.
-                        audioControl.textContent = '🔇';
-                        ambientAudio.muted = true;
-                    }
                 }
             }
 
@@ -1280,42 +1430,50 @@
                 const heroHeight = heroSection.offsetHeight;
                 let newVolume = audioVolume;
 
-                // Atenuar volumen al inicio/final de la página o en el hero
-                if (scrolled < heroHeight * 0.5) { // En la primera mitad del hero
+                if (scrolled < heroHeight * 0.5) {
                     newVolume = audioVolume * (scrolled / (heroHeight * 0.5));
-                } else if (scrolled > document.body.scrollHeight - window.innerHeight - (heroHeight * 0.5)) { // Cerca del final
+                } else if (scrolled > document.body.scrollHeight - window.innerHeight - (heroHeight * 0.5)) {
                     newVolume = audioVolume * ((document.body.scrollHeight - window.innerHeight - scrolled) / (heroHeight * 0.5));
                 }
-                ambientAudio.volume = Math.max(0, Math.min(audioVolume, newVolume)); // Asegurar que el volumen esté entre 0 y audioVolume
+                ambientAudio.volume = Math.max(0, Math.min(audioVolume, newVolume));
             };
             window.addEventListener('scroll', adjustAudioVolume, { passive: true });
 
 
             // --- Pantalla de Bienvenida ---
             if (introScreen && startButton) {
-                const introTitle = introScreen.querySelector('h2'); // h2 ya tiene text-reveal-word
+                const introTitle = introScreen.querySelector('h2');
                 if (introTitle) {
                     splitTextIntoWords(introTitle);
                     setTimeout(() => {
                         introTitle.classList.add('revealed');
+                        // Remover el glitch al empezar la animación del texto
+                        introTitle.classList.remove('glitch-effect');
                     }, 500);
                 }
 
                 startButton.addEventListener('click', () => {
-                    introScreen.classList.add('hidden');
-                    const heroTitles = heroSection.querySelectorAll('.text-reveal-word');
-                    heroTitles.forEach(title => splitTextIntoWords(title)); // Asegurar que el texto esté dividido
+                    vibrate(50); // Feedback háptico al click en el botón de inicio
 
-                    // Animar los títulos del hero después de la intro
+                    // Efecto de desintegración
+                    introScreen.classList.add('disintegrate');
+
+                    // Asegúrate de que la pantalla se oculte completamente después de la animación
+                    introScreen.addEventListener('animationend', () => {
+                        introScreen.classList.add('hidden');
+                    }, { once: true });
+
+
+                    const heroTitles = heroSection.querySelectorAll('.text-reveal-word');
+                    heroTitles.forEach(title => splitTextIntoWords(title));
+
                     setTimeout(() => {
                         heroTitles.forEach((title, index) => {
                             setTimeout(() => {
                                 title.classList.add('revealed');
                             }, index * 200);
                         });
-                    }, 0); // No hay retraso para que aparezcan justo después de la intro
-
-                    vibrate(50); // Feedback háptico al click en el botón de inicio
+                    }, 800); // 800ms para permitir que la intro se desintegre un poco antes de revelar el hero
                 });
             }
 
@@ -1326,21 +1484,19 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add('animated');
 
-                        // Animación de texto revelado para section-titles y efecto glow
                         const sectionTitle = entry.target.querySelector('.section-title');
                         if (sectionTitle) {
-                            if (!sectionTitle.classList.contains('text-reveal-word')) { // Asegura que solo se prepare una vez
+                            if (!sectionTitle.classList.contains('text-reveal-word')) {
                                 splitTextIntoWords(sectionTitle);
                             }
-                            if (!sectionTitle.classList.contains('revealed')) { // Solo anima si no ha sido revelado
+                            if (!sectionTitle.classList.contains('revealed')) {
                                 setTimeout(() => {
                                     sectionTitle.classList.add('revealed');
-                                    sectionTitle.classList.add('active-glow'); // Activar el brillo
+                                    sectionTitle.classList.add('active-glow');
                                 }, 300);
                             }
                         }
 
-                        // Animación de list items en Habilidades con delay escalonado y diamantes
                         if (entry.target.id === 'habilidades') {
                             const listItems = entry.target.querySelectorAll('ul li');
                             listItems.forEach((item, index) => {
@@ -1385,7 +1541,9 @@
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    vibrate(10); // Feedback háptico al click en el navlink
+                    vibrate(10);
+                    clickSound.currentTime = 0; // Reiniciar el sonido
+                    clickSound.play(); // Reproducir sonido de click
                     const targetId = link.getAttribute('href').substring(1);
                     const targetSection = document.getElementById(targetId);
 
@@ -1453,6 +1611,8 @@
 
             backToTopButton.addEventListener('click', () => {
                 vibrate(10);
+                clickSound.currentTime = 0;
+                clickSound.play();
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -1465,7 +1625,12 @@
                 if (!particlesContainer) return;
                 particlesContainer.innerHTML = '';
 
-                for (let i = 0; i < count; i++) {
+                let actualCount = count;
+                if (window.innerWidth < 768) { // Ejemplo de adaptación para móviles
+                    actualCount = Math.floor(count * 0.5); // Menos partículas en móvil
+                }
+
+                for (let i = 0; i < actualCount; i++) {
                     const particle = document.createElement('div');
                     particle.classList.add('particle');
                     const size = generateRandom(0.8, 2);
@@ -1509,7 +1674,7 @@
                 const MAX_TRANSLATION_ITEM = 5;
 
                 item.addEventListener('mousemove', (e) => {
-                    vibrate(1); // Pequeña vibracion al mover sobre item de galeria
+                    vibrate(1);
                     const rect = item.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -1529,7 +1694,7 @@
                     item.style.transform = `translate(${translateXItem}px, ${translateYItem}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
                     img.style.transform = `translateX(${translateXImg}px) translateY(${translateYImg}px) scale(1.02)`;
                     item.classList.add('tilt-active');
-                }, { passive: true }); // {passive: true} para mejorar rendimiento en mobile
+                }, { passive: true });
 
                 item.addEventListener('mouseleave', () => {
                     item.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg) scale(1)`;
