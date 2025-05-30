@@ -5,12 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marco Aurelio: Guardián de la Memoria Imperial</title>
-    <!-- Tailwind CSS (versión completa para JIT) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Optimización: Preconnect para Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <!-- Google Fonts: Cinzel para títulos, Playfair Display para subtítulos (como Trajan), Lora para cuerpo -->
+    <!-- Optimización: font-display: swap para evitar FOUT -->
     <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
+
+    <!-- Optimización: Precarga de imagen principal si fuera única y crítica -->
+    <!-- Si 'imagen1.jpg' es muy grande y aparece en el hero, podrías precargarla.
+         <link rel="preload" as="image" href="imagen1.jpg"> -->
+
+    <!-- Tailwind CSS (versión completa para JIT) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         /* Variables CSS para una paleta temática Romano-Griega Oscura y Misteriosa (OPTIMIZADA) */
         :root {
@@ -28,6 +40,12 @@
             /* Un gris muy claro para el texto secundario */
             --color-border-subtle: rgba(255, 255, 255, 0.12);
             /* Borde un poco más visible */
+
+            /* Variables para partículas de fondo */
+            --particle-color: rgba(255, 255, 255, 0.1);
+            --particle-size: 1px;
+            --particle-count: 50;
+            /* Número de partículas */
         }
 
         html {
@@ -39,12 +57,12 @@
             background-color: var(--color-void-dark);
             color: var(--color-text-light);
             line-height: 1.8;
-            /* Patrón de mosaico geométrico sutil y oscuro, para simular un suelo antiguo */
             background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><pattern id="roman-mosaic" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h5v5H0zM5 5h5v5H5z" fill="%23101010" /><path d="M5 0h5v5H5zM0 5h5v5H0z" fillOpacity=".04" fill="%23666"/></pattern><rect width="100%" height="100%" fill="url(%23roman-mosaic)" /></svg>');
-            /* Más sutil */
             background-attachment: fixed;
             background-blend-mode: multiply;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
+            position: relative;
+            /* Para las partículas de fondo */
         }
 
         .container {
@@ -57,21 +75,17 @@
         .content-section {
             background-color: var(--color-panel-base);
             backdrop-filter: blur(10px) grayscale(5%) brightness(95%);
-            /* Mayor blur, menos gris, más brillante */
             border: 1px solid var(--color-border-subtle);
             border-radius: 4px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.98), 0 0 20px rgba(212, 175, 55, 0.35);
-            /* Sombra más pronunciada, glow dorado más brillante */
             padding: 3rem;
             transition: all 0.5s ease-in-out;
             position: relative;
             overflow: hidden;
             color: var(--color-text-light);
-            /* Asegurar que el texto dentro del panel sea light */
             opacity: 0;
             /* Oculto por defecto para animación de revelado */
             transform: translateY(20px);
-            /* Ligeramente hacia abajo */
         }
 
         /* Animación de Revelado para Secciones */
@@ -79,7 +93,6 @@
             opacity: 1;
             transform: translateY(0);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-            /* Transición más larga y suave */
         }
 
         /* Línea Decorativa Superior */
@@ -94,19 +107,37 @@
             transform-origin: center center;
             transition: transform 0.5s ease-out;
             transform: scaleX(0);
-            /* Oculto al inicio */
         }
 
         .content-section.animated::before {
             transform: scaleX(1);
-            /* Se muestra al animarse */
         }
 
         .content-section:hover {
             transform: translateY(-10px);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 1), 0 0 35px rgba(212, 175, 55, 0.6);
-            /* Sombra más intensa y resplandor al hover */
             border-color: var(--color-accent-gold);
+        }
+
+        /* Animación al llegar a la sección */
+        .content-section.nav-target-active {
+            animation: pulse-border-gold 1s ease-out;
+        }
+
+        @keyframes pulse-border-gold {
+            0% {
+                border-color: rgba(212, 175, 55, 0.2);
+            }
+
+            50% {
+                border-color: var(--color-accent-gold);
+            }
+
+            100% {
+                border-color: var(--color-border-subtle);
+            }
+
+            /* Vuelve a su estado normal */
         }
 
         /* Estilo de Títulos (Cinzel y Playfair Display) */
@@ -116,27 +147,38 @@
             font-family: 'Cinzel', serif;
             color: var(--color-text-light);
             text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            /* Necesario para animaciones de texto por caracter/palabra */
+        }
+
+        /* Clases para animación de texto revelado */
+        .text-reveal-word span {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .text-reveal-word.revealed span {
+            transform: translateY(0);
+            opacity: 1;
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
         }
 
         .main-heading {
-            /* Para el H1 del héroe */
             font-family: 'Playfair Display', serif;
             text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 255, 255, 0.5);
             color: white;
             font-size: clamp(3rem, 12vw, 8em);
-            /* Mínimo 3rem, ideal 12vw, máximo 8em */
             padding: 0 1rem;
             box-sizing: border-box;
         }
 
         .section-title {
-            /* Para los H2 de las secciones */
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--color-text-light);
             font-size: clamp(1.8rem, 7vw, 4.5rem);
-            /* Ajustado para responsive */
             padding: 0 0.5rem;
             box-sizing: border-box;
         }
@@ -197,18 +239,20 @@
 
         /* Animación para list items en Habilidades */
         .content-section#habilidades ul li {
+            position: relative;
+            /* Para el marcador */
             opacity: 0;
-            /* Oculto por defecto */
             transform: translateY(10px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            /* No .animated aquí, JS lo añade */
         }
 
-        .content-section#habilidades.animated ul li {
+        .content-section#habilidades ul li.revealed {
+            /* Clase añadida por JS */
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Delay escalonado para li (JS lo aplicará) */
         /* Navegación: Como losas grabadas */
         .nav-link {
             position: relative;
@@ -224,7 +268,6 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
             transition: all 0.3s ease-in-out;
             outline: none;
-            /* Elimina el borde de foco por defecto */
         }
 
         .nav-link::before {
@@ -282,7 +325,6 @@
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
-            /* Necesario para paralaje con JS */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -291,6 +333,8 @@
             overflow: hidden;
             border-bottom: 5px solid var(--color-accent-gold);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+            perspective: 1000px;
+            /* Para efecto 3D en partículas */
         }
 
         .hero-overlay {
@@ -305,9 +349,77 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(212, 175, 55, 0.6);
             border: 1px solid var(--color-accent-gold);
             text-align: center;
+            position: relative;
+            /* Para z-index sobre partículas */
+            z-index: 2;
+        }
+
+        .hero-content p.text-xl {
+            color: var(--color-text-muted);
+            font-size: clamp(1rem, 4vw, 3em);
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Efecto de desvanecimiento para texto en Hero al scroll */
+        .hero-fade-text {
+            transition: opacity 0s;
+            /* Controlado por JS, no CSS smoothing */
+        }
+
+        /* Partículas de fondo (Hero y Footer) */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            /* Detrás del contenido */
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--particle-color);
+            border-radius: 50%;
+            filter: blur(0.5px);
+            /* Suaviza los bordes */
+            opacity: 0;
+            animation: particle-anim 20s infinite ease-in-out;
+            /* Animación de movimiento */
+            animation-delay: var(--delay);
+            width: var(--particle-size);
+            height: var(--particle-size);
+            transform: translateZ(var(--z-index));
+            /* Para efecto 3D */
+            /* Se establece en JS el top, left, size, delay, z-index */
+        }
+
+        @keyframes particle-anim {
+            0% {
+                transform: translate(var(--start-x), var(--start-y)) scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(var(--mid-x), var(--mid-y)) scale(1);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(var(--end-x), var(--end-y)) scale(0.5);
+                opacity: 0;
+            }
         }
 
         /* Galería e Imágenes: Como hallazgos antiguos */
+        .gallery-item {
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
         .gallery-item img {
             transition: all 0.4s ease-in-out;
             filter: grayscale(90%) contrast(70%) brightness(80%);
@@ -315,26 +427,21 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
             border-radius: 2px;
             display: block;
-            /* Para evitar espacio extra */
             width: 100%;
-            /* Asegurar que ocupe todo el ancho del contenedor */
+            pointer-events: none;
+            /* Las imágenes no interfieren con el JS del padre */
         }
 
-        .gallery-item img:hover {
-            filter: grayscale(0%) contrast(100%) brightness(100%);
-            transform: scale(1.05) rotate(0.5deg);
+        /* Efecto Hover Tilt/Parallax para galería */
+        .gallery-item.tilt-active {
+            transition: transform 0.1s linear;
+            /* Muy rápido */
+        }
+
+        .gallery-item.tilt-active img {
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 15px var(--color-accent-gold);
             border-color: var(--color-accent-gold);
-        }
-
-        .section-image {
-            transform: rotate(0deg);
-            transition: transform 0.4s ease-in-out;
-            border-radius: 4px;
-        }
-
-        .section-image:hover {
-            transform: scale(1.01);
+            filter: grayscale(0%) contrast(100%) brightness(100%);
         }
 
         /* Footer: Columna de cierre */
@@ -348,6 +455,12 @@
             box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.9);
             font-family: 'Cinzel', serif;
             letter-spacing: 0.05em;
+            position: relative;
+            /* Para partículas */
+            overflow: hidden;
+            /* Para partículas */
+            z-index: 0;
+            /* Para asegurar que las partículas se queden dentro */
         }
 
         /* Pantalla de inicio - Temática revisada */
@@ -366,6 +479,8 @@
             z-index: 1000;
             transition: opacity 0.7s ease-in-out;
             color: var(--color-text-light);
+            perspective: 1000px;
+            /* Para efecto 3D en partículas aqui también si se quieren */
         }
 
         #start-button {
@@ -391,7 +506,6 @@
         }
 
         #start-button:active {
-            /* Feedback al clickear */
             transform: translateY(0px) scale(0.98);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
@@ -399,7 +513,6 @@
         #intro-screen h2 {
             font-family: 'Cinzel', serif;
             font-size: clamp(2.5rem, 10vw, 4.5rem);
-            /* Mínimo 2.5rem, ideal 10vw, máximo 4.5rem */
             font-weight: bold;
             margin-bottom: 2rem;
             text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px var(--color-accent-gold);
@@ -410,6 +523,8 @@
             text-align: center;
             padding: 0 1rem;
             box-sizing: border-box;
+            overflow: hidden;
+            /* Importante para el text-reveal */
         }
 
         @keyframes pulse-gold {
@@ -433,7 +548,6 @@
             margin-bottom: 3rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
             text-align: center;
-            /* También centrar este texto */
             padding: 0 1rem;
             box-sizing: border-box;
         }
@@ -441,6 +555,8 @@
         #intro-screen.hidden {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
+            /* Asegura que no se pueda interactuar */
         }
 
         /* Ajustes adicionales para contraste en el contenido de texto */
@@ -453,16 +569,12 @@
         .header-sticky-roman {
             border-bottom: 5px solid var(--color-accent-gold);
             background-color: var(--color-void-dark);
-            /* Asegura que el fondo sea el void dark */
             backdrop-filter: blur(10px) brightness(80%);
-            /* Ajustado para transparencia */
         }
 
-        /* Asegurarse de que el texto de descripción en el hero sea legible */
         .hero-content p.text-xl {
             color: var(--color-text-muted);
             font-size: clamp(1rem, 4vw, 3em);
-            /* Mínimo 1rem, ideal 4vw, máximo 3em */
             padding: 0 1rem;
             box-sizing: border-box;
         }
@@ -473,7 +585,6 @@
             top: 0;
             left: 0;
             height: 4px;
-            /* Un poco más grueso para visibilidad */
             width: 0%;
             background-color: var(--color-accent-gold);
             z-index: 999;
@@ -503,7 +614,6 @@
             visibility: hidden;
             z-index: 990;
             font-family: 'Cinzel', serif;
-            /* Para el triángulo o icono */
             font-weight: bold;
         }
 
@@ -531,22 +641,24 @@
 
     <!-- Pantalla de Bienvenida -->
     <div id="intro-screen">
-        <h2>GUARDIANES DE LA MEMORIA IMPERIAL</h2>
+        <h2 class="text-reveal-word">GUARDIANES DE LA MEMORIA IMPERIAL</h2>
         <p>Los ecos de la antigüedad susurran verdades olvidadas.</p>
         <button id="start-button" aria-label="Acceder a la Ficha Clasificada">ACCEDER A LA FICHA CLASIFICADA</button>
     </div>
 
     <!-- Sección Hero: Entrada Principal al Expediente -->
-    <section class="hero-section" id="hero">
+    <section class="hero-section" id="hero" role="region" aria-label="Introducción a Marco Aurelio">
         <div class="hero-overlay absolute inset-0"></div>
+        <!-- Partículas de fondo en Hero -->
+        <div class="particles-container"></div>
         <div class="hero-content relative z-10 animate-fade-in-scale">
-            <p class="text-xl text-yellow-200 mb-3 uppercase tracking-widest leading-none">
+            <p class="hero-fade-text text-xl text-yellow-200 mb-3 uppercase tracking-widest leading-none">
                 EXPEDIENTE DE AGENTE CALIFICADO
             </p>
-            <h1 class="main-heading font-bold mb-4 leading-tight">
+            <h1 class="main-heading hero-fade-text text-reveal-word font-bold mb-4 leading-tight">
                 MARCO AURELIO
             </h1>
-            <p class="text-xl font-medium italic">
+            <p class="hero-fade-text text-xl font-medium italic">
                 "El conocimiento es el pilar que sostiene nuestro imperio."
             </p>
         </div>
@@ -556,7 +668,8 @@
     <div class="container mx-auto max-w-screen-xl">
         <!-- Cabecera de Navegación Sticky -->
         <header
-            class="header-sticky-roman sticky top-0 z-20 bg-dark-void bg-opacity-80 backdrop-filter backdrop-blur-xl py-4 shadow-xl mb-16 border-b border-stone-gray">
+            class="header-sticky-roman sticky top-0 z-20 bg-dark-void bg-opacity-80 backdrop-filter backdrop-blur-xl py-4 shadow-xl mb-16 border-b border-stone-gray"
+            role="navigation" aria-label="Navegación principal">
             <nav class="grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 justify-center">
                 <a href="#perfil" class="nav-link" aria-label="Ir a Perfil de Agente"><span>PERFIL DE AGENTE</span></a>
                 <a href="#habilidades" class="nav-link" aria-label="Ir a Habilidades Clave"><span>HABILIDADES
@@ -572,10 +685,11 @@
             </nav>
         </header>
 
-        <main class="space-y-24">
+        <main role="main" class="space-y-24">
             <!-- Sección: Perfil de Agente -->
-            <section id="perfil" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">PERFIL DE AGENTE: MARCO AURELIO</h2>
+            <section id="perfil" class="content-section animate-on-scroll" role="region" aria-labelledby="perfil-title">
+                <h2 id="perfil-title" class="section-title title-divider-line text-center">PERFIL DE AGENTE: MARCO
+                    AURELIO</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p><strong class="font-semibold text-accent">NOMBRE COMPLETO:</strong> Marco Aurelio</p>
@@ -595,8 +709,9 @@
             </section>
 
             <!-- Sección: Habilidades Clave -->
-            <section id="habilidades" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">HABILIDADES CLAVE</h2>
+            <section id="habilidades" class="content-section animate-on-scroll" role="region"
+                aria-labelledby="habilidades-title">
+                <h2 id="habilidades-title" class="section-title title-divider-line text-center">HABILIDADES CLAVE</h2>
                 <ul class="space-y-8 text-base md:text-xl list-none pl-0">
                     <li class="relative pl-8">
                         <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
@@ -626,8 +741,9 @@
             </section>
 
             <!-- Sección: Historial Operativo (Origen e Influencias) -->
-            <section id="historico" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">HISTORIAL OPERATIVO</h2>
+            <section id="historico" class="content-section animate-on-scroll" role="region"
+                aria-labelledby="historico-title">
+                <h2 id="historico-title" class="section-title title-divider-line text-center">HISTORIAL OPERATIVO</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p>Marco Aurelio proviene de una <strong class="text-accent">estirpe de bibliotecarios y
@@ -650,8 +766,9 @@
             </section>
 
             <!-- Sección: Rasgos Personales (Personalidad y Defectos) -->
-            <section id="personalidad" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">RASGOS PERSONALES</h2>
+            <section id="personalidad" class="content-section animate-on-scroll" role="region"
+                aria-labelledby="personalidad-title">
+                <h2 id="personalidad-title" class="section-title title-divider-line text-center">RASGOS PERSONALES</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p>Marco es conocido por su <strong class="text-accent">meticulosa disciplina y su postura
@@ -675,8 +792,10 @@
             </section>
 
             <!-- Sección: Compañero Monstrum -->
-            <section id="monstrum" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">COMPAÑERO MONSTRUM: ESENCIA</h2>
+            <section id="monstrum" class="content-section animate-on-scroll" role="region"
+                aria-labelledby="monstrum-title">
+                <h2 id="monstrum-title" class="section-title title-divider-line text-center">COMPAÑERO MONSTRUM: ESENCIA
+                </h2>
                 <div class="flex flex-col items-center mb-8">
                     <img src="imagen4.jpg" alt="Foto de Esencia el Ivysaur" loading="lazy"
                         class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-2xl border-4 border-ancient-gold mb-4">
@@ -696,33 +815,37 @@
             </section>
 
             <!-- Sección: Archivos Visuales (Galería) -->
-            <section id="galeria" class="content-section animate-on-scroll">
-                <h2 class="section-title title-divider-line text-center">ARCHIVOS VISUALES IMPERIALES</h2>
+            <section id="galeria" class="content-section animate-on-scroll" role="region"
+                aria-labelledby="galeria-title">
+                <h2 id="galeria-title" class="section-title title-divider-line text-center">ARCHIVOS VISUALES IMPERIALES
+                </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="gallery-item">
-                        <img src="imagen5.jpg" alt="Archivo Visual 1" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen5.jpg" alt="Archivo Visual 1" loading="lazy">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen6.jpg" alt="Archivo Visual 2" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen6.jpg" alt="Archivo Visual 2" loading="lazy">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen1.jpg" alt="Archivo Visual 3" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen1.jpg" alt="Archivo Visual 3" loading="lazy">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen2.jpg" alt="Archivo Visual 4" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen2.jpg" alt="Archivo Visual 4" loading="lazy">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen3.jpg" alt="Archivo Visual 5" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen3.jpg" alt="Archivo Visual 5" loading="lazy">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen4.jpg" alt="Archivo Visual 6" loading="lazy" class="w-full h-auto rounded-lg">
+                        <img src="imagen4.jpg" alt="Archivo Visual 6" loading="lazy">
                     </div>
                 </div>
             </section>
         </main>
 
         <!-- Pie de Página -->
-        <footer class="mt-20 text-center border-t border-stone-gray pt-12 pb-8">
+        <footer class="mt-20 text-center border-t border-stone-gray pt-12 pb-8" role="contentinfo">
+            <!-- Partículas de fondo en Footer -->
+            <div class="particles-container"></div>
             <p class="text-sm mb-2">"Las verdades del pasado son los cimientos de nuestro futuro
                 imperial."</p>
             <p class="text-xs">&copy; <span id="currentYear"></span> Archivos Imperiales del Orbis. Todos
@@ -745,14 +868,51 @@
             const heroSection = document.getElementById('hero');
             const scrollProgress = document.getElementById('scroll-progress');
             const backToTopButton = document.getElementById('back-to-top');
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const header = document.querySelector('header');
+
+            // --- Utilidades ---
+            function splitTextIntoWords(element) {
+                const text = element.textContent;
+                element.innerHTML = '';
+                const words = text.split(' ').filter(word => word.length > 0);
+                words.forEach(word => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.textContent = word + ' ';
+                    element.appendChild(wordSpan);
+                });
+            }
+
+            function generateRandom(min, max) {
+                return Math.random() * (max - min) + min;
+            }
 
             // --- Pantalla de Bienvenida ---
             if (introScreen && startButton) {
+                // Preparar títulos para animación de revelado
+                document.querySelectorAll('.text-reveal-word').forEach(element => {
+                    splitTextIntoWords(element);
+                });
+
                 startButton.addEventListener('click', () => {
                     introScreen.classList.add('hidden');
-                    // Opcional: enfocar el body o el hero para iniciar correctamente
-                    // document.body.focus();
+                    // Iniciar animación de los títulos del hero una vez que la pantalla de intro se oculta
+                    const heroTitles = heroSection.querySelectorAll('.text-reveal-word');
+                    heroTitles.forEach((title, index) => {
+                        setTimeout(() => {
+                            title.classList.add('revealed');
+                        }, index * 200); // 200ms de delay entre cada título (si hubiera varios)
+                    });
                 });
+                // Animar el título de la pantalla de inicio al cargar
+                const introTitle = introScreen.querySelector('h2.text-reveal-word');
+                if (introTitle) {
+                    splitTextIntoWords(introTitle);
+                    setTimeout(() => {
+                        introTitle.classList.add('revealed');
+                    }, 500); // Pequeño delay para que se vea la animación al aparecer
+                }
             }
 
             // --- Observador de Intersección para animaciones al hacer scroll ---
@@ -760,14 +920,29 @@
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('animated'); /* Para las secciones y la línea de acento */
+                        entry.target.classList.add('animated');
 
-                        // Si es la sección de Habilidades, animar los <li> con un delay escalonado
+                        // Animación de texto revelado para section-titles
+                        const sectionTitle = entry.target.querySelector('.section-title');
+                        if (sectionTitle) {
+                            if (!sectionTitle.classList.contains('text-reveal-word')) { // Asegura que solo se prepare una vez
+                                splitTextIntoWords(sectionTitle);
+                                sectionTitle.classList.add('text-reveal-word');
+                            }
+                            if (!sectionTitle.classList.contains('revealed')) { // Solo anima si no ha sido revelado
+                                setTimeout(() => {
+                                    sectionTitle.classList.add('revealed');
+                                }, 300); // Pequeño delay después de que la sección aparece
+                            }
+                        }
+
+                        // Animación de list items en Habilidades con delay escalonado
                         if (entry.target.id === 'habilidades') {
                             const listItems = entry.target.querySelectorAll('ul li');
                             listItems.forEach((item, index) => {
-                                item.style.transitionDelay = `${index * 0.1}s`; // 0.1s de delay por cada item
-                                item.classList.add('animated'); // Causa la transición de li
+                                setTimeout(() => {
+                                    item.classList.add('revealed');
+                                }, index * 100); // 100ms de delay por cada item
                             });
                         }
                         observer.unobserve(entry.target);
@@ -775,25 +950,18 @@
                 });
             }, observerOptions);
 
-            document.querySelectorAll('.animate-on-scroll').forEach(element => {
+            document.querySelectorAll('.content-section').forEach(element => { // Observar todas las content-sections
                 observer.observe(element);
             });
 
-            // --- Lógica para resaltar el enlace de navegación activo ---
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const header = document.querySelector('header');
-
+            // --- Lógica para resaltar el enlace de navegación activo y animación al click ---
             const highlightNavLink = () => {
                 let current = '';
                 const headerOffset = header ? header.offsetHeight : 0;
-                // Usamos window.scrollY para mayor compatibilidad y precisión
                 const scrollY = window.scrollY;
 
                 sections.forEach(section => {
-                    // Ajuste para que la sección se considere activa cuando el sticky header no la ocupe demasiado
-                    const sectionTop = section.offsetTop - headerOffset - 50; // Ajuste para que el inicio de la sección sea visible
-
+                    const sectionTop = section.offsetTop - headerOffset - 50;
                     if (scrollY >= sectionTop && scrollY < section.offsetTop + section.offsetHeight - headerOffset - (window.innerHeight * 0.2)) {
                         current = section.getAttribute('id');
                     }
@@ -808,7 +976,37 @@
             };
 
             window.addEventListener('scroll', highlightNavLink);
-            highlightNavLink(); // Llama al inicio para fijar la sección activa al cargar la página
+            highlightNavLink();
+
+            // Animación al hacer click en un enlace de navegación
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+
+                    if (targetSection) {
+                        // Desactivar animaciones anteriores
+                        document.querySelectorAll('.content-section.nav-target-active').forEach(sec => {
+                            sec.classList.remove('nav-target-active');
+                        });
+
+                        // Scroll suave
+                        const offsetTop = targetSection.offsetTop - (header ? header.offsetHeight : 0) - 10; // Ajuste para que se vea bien
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+
+                        // Añadir clase para animación de borde
+                        targetSection.classList.add('nav-target-active');
+                        // Eliminar la clase después de la animación para futuras activaciones
+                        targetSection.addEventListener('animationend', () => {
+                            targetSection.classList.remove('nav-target-active');
+                        }, { once: true });
+                    }
+                });
+            });
 
             // --- Scroll Progress Indicator ---
             const updateScrollProgress = () => {
@@ -818,34 +1016,113 @@
                 scrollProgress.style.width = `${progressPercentage}%`;
             };
             window.addEventListener('scroll', updateScrollProgress);
-            updateScrollProgress(); // Llama al inicio para fijar la posición inicial
+            updateScrollProgress();
 
-            // --- Efecto Paralaje Hero Section ---
-            const applyParallax = () => {
+            // --- Efecto Paralaje Hero Section / Desvanecimiento Texto Hero ---
+            const heroTextElements = heroSection.querySelectorAll('.hero-fade-text');
+            const applyParallaxAndFade = () => {
                 if (heroSection) {
                     const scrolled = window.scrollY;
-                    // Ajusta el factor de paralaje para más o menos efecto
+                    // Paralaje de fondo
                     heroSection.style.backgroundPositionY = `calc(50% + ${scrolled * 0.3}px)`;
+
+                    // Efecto de desvanecimiento para texto
+                    const heroHeight = heroSection.offsetHeight;
+                    heroTextElements.forEach(el => {
+                        const opacity = 1 - Math.max(0, (scrolled - (heroHeight * 0.3)) / (heroHeight * 0.4)); // Desvanece entre 30% y 70% del scroll del hero
+                        el.style.opacity = Math.max(0, opacity);
+                        el.style.transform = `translateY(${scrolled * 0.1}px)`; // Ligero movimiento hacia arriba
+                    });
                 }
             };
-            window.addEventListener('scroll', applyParallax);
-            applyParallax(); // Apply initially
+            window.addEventListener('scroll', applyParallaxAndFade);
+            applyParallaxAndFade();
 
             // --- Back to Top Button ---
             const toggleBackToTopButton = () => {
-                if (window.scrollY > window.innerHeight / 2) { // Aparece después de scroll un 50% de la altura de la ventana
+                if (window.scrollY > window.innerHeight / 2) {
                     backToTopButton.classList.add('visible');
                 } else {
                     backToTopButton.classList.remove('visible');
                 }
             };
             window.addEventListener('scroll', toggleBackToTopButton);
-            toggleBackToTopButton(); // Check on load
+            toggleBackToTopButton();
 
             backToTopButton.addEventListener('click', () => {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
+                });
+            });
+
+            // --- Partículas de Fondo ---
+            function createParticles(container, count) {
+                const particlesContainer = container.querySelector('.particles-container');
+                if (!particlesContainer) return; // Si no hay contenedor de partículas, no hacer nada
+
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    const size = generateRandom(1, 3);
+                    const delay = generateRandom(0, 20); // Retraso de animación
+                    const startX = generateRandom(0, 100);
+                    const startY = generateRandom(0, 100);
+                    const midX = generateRandom(0, 100);
+                    const midY = generateRandom(0, 100);
+                    const endX = generateRandom(0, 100);
+                    const endY = generateRandom(0, 100);
+                    const zIndex = generateRandom(-100, 100); // Para efecto 3D Z-index
+
+                    particle.style.setProperty('--particle-size', `${size}px`);
+                    particle.style.setProperty('--delay', `${delay}s`);
+                    particle.style.setProperty('--start-x', `${startX}vw`);
+                    particle.style.setProperty('--start-y', `${startY}vh`);
+                    particle.style.setProperty('--mid-x', `${midX}vw`);
+                    particle.style.setProperty('--mid-y', `${midY}vh`);
+                    particle.style.setProperty('--end-x', `${endX}vw`);
+                    particle.style.setProperty('--end-y', `${endY}vh`);
+                    particle.style.setProperty('--z-index', `${zIndex}px`); // Assign Z for 3D effect
+
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            createParticles(heroSection, 80); // 80 partículas en el Hero
+            createParticles(document.querySelector('footer'), 60); // 60 partículas en el Footer
+
+            // --- Hover con efecto Tilt/Parallax en Galería ---
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                const img = item.querySelector('img');
+                const MAX_ROTATION = 8; // Grados máximos de rotación
+                const MAX_TRANSLATION = 10; // Píxeles máximos de traslación
+
+                item.addEventListener('mousemove', (e) => {
+                    const rect = item.getBoundingClientRect();
+                    const x = e.clientX - rect.left; // Posición X dentro del elemento
+                    const y = e.clientY - rect.top;  // Posición Y dentro del elemento
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    // Calcular inclinación
+                    const rotateX = ((y - centerY) / centerY) * -MAX_ROTATION; // Rotación inversa para efecto 3D
+                    const rotateY = ((x - centerX) / centerX) * MAX_ROTATION;
+
+                    // Calcular traslación (efecto mouse por detrás)
+                    const translateX = ((x - centerX) / centerX) * MAX_TRANSLATION;
+                    const translateY = ((y - centerY) / centerY) * MAX_TRANSLATION;
+
+                    item.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    img.style.transform = `translateX(${translateX}px) translateY(${translateY}px) scale(1.02)`; // Ligero zoom también
+                    item.classList.add('tilt-active');
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    item.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    img.style.transform = `translateX(0px) translateY(0px) scale(1)`;
+                    item.classList.remove('tilt-active');
                 });
             });
 
