@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marco Aurelio: Guardián de la Memoria Imperial</title>
+    <!-- Tailwind CSS (versión completa para JIT) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel para títulos, Playfair Display para subtítulos (como Trajan), Lora para cuerpo -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Variables CSS para una paleta temática Romano-Griega Oscura y Misteriosa (MEJORADO PARA LEGIBILIDAD) */
+        :root {
+            --color-void-dark: #0A0A0A;
+            /* Un negro aún más profundo para el fondo principal */
+            --color-panel-base: rgba(18, 18, 18, 0.95);
+            /* Fondo de los paneles, ligeramente más claro y opaco */
+            --color-accent-gold: #D4AF37;
+            /* Oro más brillante y claro, para mejor visibilidad */
+            --color-accent-stone-blue: #6A86B9;
+            /* Azul piedra más vibrante y legible */
+            --color-text-light: #FFFFFF;
+            /* Blanco puro para el texto principal */
+            --color-text-muted: #D0D0D0;
+            /* Un gris muy claro para el texto secundario */
+            --color-border-subtle: rgba(255, 255, 255, 0.1);
+            /* Borde un poco más visible */
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--color-void-dark);
+            color: var(--color-text-light);
+            /* Aseguramos que el texto principal use el blanco puro */
+            line-height: 1.8;
+            /* Patrón de mosaico geométrico sutil y oscuro, para simular un suelo antiguo */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><pattern id="roman-mosaic" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h5v5H0zM5 5h5v5H5z" fill="%23141414" /><path d="M5 0h5v5H5zM0 5h5v5H0z" fillOpacity=".08" fill="%23666"/></pattern><rect width="100%" height="100%" fill="url(%23roman-mosaic)" /></svg>');
+            /* Ligeramente más claro */
+            background-attachment: fixed;
+            background-blend-mode: multiply;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Contenido de Sección: Los "bloques de piedra" de información */
+        .content-section {
+            background-color: var(--color-panel-base);
+            backdrop-filter: blur(8px) grayscale(10%) brightness(90%);
+            /* Menos gris, más brillante, blur más pronunciado */
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 4px;
+            /* Pequeños bordes para sensación de bloque tallado */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.95), 0 0 15px rgba(212, 175, 55, 0.3);
+            /* Sombra más pronunciada, glow dorado más brillante */
+            padding: 3rem;
+            transition: all 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            color: var(--color-text-light);
+            /* Asegurar que el texto dentro del panel sea light */
+        }
+
+        .content-section::before {
+            /* Línea decorativa superior */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--color-accent-gold), transparent);
+            transform-origin: center center;
+            transition: transform 0.5s ease-out;
+            transform: scaleX(0);
+            /* Oculto al inicio */
+        }
+
+        .content-section.animated::before {
+            transform: scaleX(1);
+            /* Se muestra al animarse */
+        }
+
+        .content-section:hover {
+            transform: translateY(-10px);
+            /* Flota más al pasar el ratón */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 1), 0 0 30px rgba(212, 175, 55, 0.5);
+            /* Sombra más intensa y resplandor al hover */
+            border-color: var(--color-accent-gold);
+            /* Borde se vuelve dorado */
+        }
+
+        /* Estilo de Títulos (Cinzel y Playfair Display) */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--color-text-light);
+            /* Blanco puro para todos los títulos */
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 175, 55, 0.2);
+            /* Sombra para profundidad y resplandor sutil (ajustado brillo) */
+        }
+
+        .main-heading {
+            /* Para el H1 del héroe */
+            font-family: 'Playfair Display', serif;
+            /* Una fuente más fluida y elegante para el nombre, como si fuera una firma */
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 255, 255, 0.5);
+            /* Sombra blanca para contraste, aumentada opacidad */
+            color: white;
+            /* Blanco puro para impactar */
+            /* clamp para h1 de hero */
+            font-size: clamp(3rem, 12vw, 8em);
+            /* Mínimo 3rem, ideal 12vw, máximo 8em */
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            /* Para los H2 de las secciones */
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            /* Espacio extra para efecto de inscripción */
+            color: var(--color-text-light);
+            /* Aseguramos que el título de sección sea blanco puro */
+            /* clamp para section-title */
+            font-size: clamp(1.8rem, 7vw, 4.5rem);
+            /* Ajustado para responsive */
+            padding: 0 0.5rem;
+            /* Pequeño padding para no tocar los bordes */
+            box-sizing: border-box;
+        }
+
+        .title-divider-line {
+            /* Línea divisoria de título más elaborada */
+            position: relative;
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+        }
+
+        .title-divider-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(to right, transparent 0%, var(--color-accent-gold) 10%, var(--color-accent-gold) 90%, transparent 100%);
+            opacity: 0.8;
+            /* Opacidad aumentada para la línea dorada */
+            animation: pulse-line 3s infinite alternate;
+        }
+
+        @keyframes pulse-line {
+            0% {
+                transform: translateX(-50%) scaleX(0.7);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translateX(-50%) scaleX(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateX(-50%) scaleX(0.7);
+                opacity: 0.4;
+            }
+        }
+
+        /* Estilo de Textos y Citas */
+        .text-accent {
+            color: var(--color-accent-gold);
+            /* Oro para datos clave, ahora más brillante */
+            font-weight: 700;
+        }
+
+        .text-quote {
+            font-family: 'Lora', serif;
+            /* Mismo cuerpo de texto */
+            font-style: italic;
+            color: var(--color-text-muted);
+            /* Texto atenuado, ahora más claro */
+            border-left: 5px solid var(--color-accent-stone-blue);
+            /* Borde de cita en azul piedra, ahora más visible */
+            padding-left: 20px;
+            margin-top: 25px;
+            font-size: 1.15em;
+            line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            /* Sombra más pronunciada en el texto de la cita */
+        }
+
+        /* Navegación: Como losas grabadas */
+        .nav-link {
+            position: relative;
+            color: var(--color-text-muted);
+            /* Color inicial del enlace más claro */
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            /* Más espacio en navegación */
+            padding: 14px 18px;
+            /* Más grande y prominente */
+            border-radius: 2px;
+            /* Esquinas muy sutiles para efecto de losa */
+            background-color: rgba(25, 25, 25, 0.8);
+            /* Fondo ligeramente más claro */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Borde más visible */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+            /* Sombra más fuerte para contraste */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-link::before {
+            /* Nuevo borde de acento en el centro */
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--color-accent-stone-blue), transparent);
+            /* Línea azul */
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: center center;
+            /* Animación desde el centro */
+            transition: transform 0.3s ease-out;
+            z-index: 1;
+        }
+
+        .nav-link:hover::before {
+            transform: translateY(-50%) scaleX(0.8);
+        }
+
+        /* Se revela una línea */
+        .nav-link:hover {
+            color: var(--color-text-light);
+            /* Blanco puro al hover */
+            background-color: rgba(35, 35, 35, 0.9);
+            /* Fondo un poco más claro al hover */
+            border-color: var(--color-accent-stone-blue);
+            /* Borde se ilumina en azul, ahora más visible */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 15px rgba(106, 134, 185, 0.4);
+            /* Sombra más fuerte y resplandor azul, ahora más claro */
+            transform: translateY(-4px);
+            /* Flota más */
+        }
+
+        .nav-link.active {
+            color: var(--color-text-light);
+            /* Blanco puro para el activo */
+            background-color: rgba(212, 175, 55, 0.15);
+            /* Fondo dorado semitransparente, ahora más brillante */
+            border-color: var(--color-accent-gold);
+            /* Borde activo en oro, ahora más brillante */
+            box-shadow: 0 4px 25px rgba(212, 175, 55, 0.7), 0 0 10px rgba(212, 175, 55, 0.9);
+            /* Sombra/resplandor fuerte, ahora más brillante */
+            animation: pulse-active-nav 1.5s infinite alternate;
+            /* Animación suave en el activo */
+        }
+
+        .nav-link.active::before {
+            background: linear-gradient(to right, transparent, var(--color-accent-gold), transparent);
+            /* Línea en oro */
+            transform: translateY(-50%) scaleX(1);
+        }
+
+        @keyframes pulse-active-nav {
+
+            /* Animación sutil para el enlace activo */
+            0% {
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 8px 30px rgba(212, 175, 55, 0.8), 0 0 15px rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        /* Hero Section - Más solemne y misteriosa */
+        .hero-section {
+            background-image: url('imagen1.jpg');
+            /* Usar imagen1.jpg directamente aquí */
+            background-size: cover;
+            background-position: center center;
+            /* Centrar la imagen, no solo bottom */
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--color-accent-gold);
+            /* Borde final dorado */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.98) 100%);
+            /* Más opaco para envolver más el texto */
+            backdrop-filter: blur(8px) grayscale(20%);
+            /* Más blur para un ambiente inmersivo, menos gris */
+        }
+
+        .hero-content {
+            padding: 4rem;
+            background-color: rgba(20, 20, 20, 0.98);
+            /* Fondo casi opaco y más oscuro */
+            border-radius: 4px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(212, 175, 55, 0.6);
+            /* Caja de hero glow, ahora más brillante */
+            border: 1px solid var(--color-accent-gold);
+            text-align: center;
+        }
+
+        /* Galería e Imágenes: Como hallazgos antiguos */
+        .gallery-item img {
+            transition: all 0.4s ease-in-out;
+            filter: grayscale(90%) contrast(70%) brightness(80%);
+            /* Muy apagado, como hallazgo cubierto de polvo */
+            border: 2px solid transparent;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            /* Sombra un poco más fuerte */
+            border-radius: 2px;
+        }
+
+        .gallery-item img:hover {
+            filter: grayscale(0%) contrast(100%) brightness(100%);
+            /* Se revela a todo color */
+            transform: scale(1.05) rotate(0.5deg);
+            /* Efecto más sutil */
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 15px var(--color-accent-gold);
+            /* Resplandor dorado fuerte, ahora más brillante */
+            border-color: var(--color-accent-gold);
+        }
+
+        .section-image {
+            transform: rotate(0deg);
+            /* Eliminamos la rotación por defecto para la imagen principal */
+            transition: transform 0.4s ease-in-out;
+            border-radius: 4px;
+        }
+
+        .section-image:hover {
+            transform: scale(1.01);
+        }
+
+        /* Solo un ligero zoom */
+        /* Footer: Columna de cierre */
+        footer {
+            border-top: 5px solid var(--color-accent-gold);
+            /* Borde final dorado, más brillante */
+            background-color: var(--color-void-dark);
+            color: var(--color-text-muted);
+            /* Texto atenuado, ahora más claro */
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            font-size: 0.8em;
+            box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.9);
+            /* Sombra más fuerte */
+            font-family: 'Cinzel', serif;
+            /* Footer con Cinzel para darle importancia */
+            letter-spacing: 0.05em;
+        }
+
+        /* Pantalla de inicio - Temática revisada */
+        #intro-screen {
+            background-color: rgba(0, 0, 0, 0.99);
+            /* Más opaco */
+            backdrop-filter: blur(15px);
+            /* Más blur */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            transition: opacity 0.7s ease-in-out;
+            color: var(--color-text-light);
+            /* Asegura que el texto general de la Intro sea legible */
+        }
+
+        #start-button {
+            background-color: var(--color-accent-gold);
+            /* Color del oro, ahora más brillante */
+            color: var(--color-void-dark);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 3px;
+            /* Más angular */
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            /* Sombra más fuerte */
+            font-weight: 700;
+        }
+
+        #start-button:hover {
+            background-color: #E2BF65;
+            /* Tono de oro ligeramente más claro (más brillante) */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 12px var(--color-accent-gold);
+            /* Sombra más fuerte y glow más brillante */
+            transform: translateY(-2px);
+        }
+
+        #intro-screen h2 {
+            font-family: 'Cinzel', serif;
+            /* clamp para intro-screen h2 */
+            font-size: clamp(2.5rem, 10vw, 4.5rem);
+            /* Mínimo 2.5rem, ideal 10vw, máximo 4.5rem */
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px var(--color-accent-gold);
+            /* Glow de oro más brillante */
+            text-transform: uppercase;
+            /* letter-spacing: 0.1em; (eliminado para clamp ya que puede desbordar) */
+            letter-spacing: 0.05em;
+            /* Reducimos ligeramente el letter-spacing para mobile */
+            animation: pulse-gold 3s infinite alternate;
+            /* Animación de pulsación para el título */
+            color: var(--color-text-light);
+            /* Esto asegura que el título de la Intro sea legible */
+            text-align: center;
+            /* Aseguramos que el texto esté centrado si hay saltos de línea */
+            padding: 0 1rem;
+            box-sizing: border-box;
+            /* Asegura que el padding se incluya en el ancho total */
+        }
+
+        @keyframes pulse-gold {
+            0% {
+                text-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 0 0 5px rgba(212, 175, 55, 0.2);
+            }
+
+            50% {
+                text-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 15px rgba(212, 175, 55, 0.7);
+            }
+
+            100% {
+                text-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 0 0 5px rgba(212, 175, 55, 0.2);
+            }
+        }
+
+        #intro-screen p {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: var(--color-text-muted);
+            /* Texto atenuado, ahora más claro */
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            /* Sombra un poco más fuerte */
+        }
+
+        #intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Ajustes adicionales para contraste en el contenido de texto */
+        .text-lg,
+        .text-xl,
+        .text-base {
+            color: var(--color-text-light);
+            /* Esto asegura que la gran mayoría del texto del cuerpo sea blanco puro */
+        }
+
+        .header-sticky-roman {
+            border-bottom: 5px solid var(--color-accent-gold);
+            /* Borde dorado para el sticky header */
+        }
+
+        /* Asegurarse de que el texto de descripción en el hero sea legible */
+        .hero-content p.text-xl {
+            color: var(--color-text-muted);
+            /* Puede ser blanco o muted, dependiendo de la cercanía al título principal */
+            /* clamp para p en hero-content */
+            font-size: clamp(1rem, 4vw, 3em);
+            /* Mínimo 1rem, ideal 4vw, máximo 3em */
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <!-- Pantalla de Bienvenida -->
+    <div id="intro-screen">
+        <h2 class="hero-content">GUARDIANES DE LA MEMORIA IMPERIAL</h2>
+        <p>Los ecos de la antigüedad susurran verdades olvidadas.</p>
+        <button id="start-button">ACCEDER A LA FICHA CLASIFICADA</button>
+    </div>
+    <!-- Sección Hero: Entrada Principal al Expediente -->
+    <section class="hero-section">
+        <div class="hero-overlay absolute inset-0"></div>
+        <div class="hero-content relative z-10 animate-fade-in-scale">
+            <p class="text-xl text-yellow-200 mb-3 uppercase tracking-widest leading-none">
+                EXPEDIENTE DE AGENTE CALIFICADO
+            </p>
+            <h1 class="main-heading font-bold mb-4 leading-tight">
+                MARCO AURELIO
+            </h1>
+            <p class="text-xl md:text-2xl lg:text-3xl font-medium italic">
+                "El conocimiento es el pilar que sostiene nuestro imperio."
+            </p>
+        </div>
+    </section>
+    <!-- Contenedor Principal de la Página -->
+    <div class="container mx-auto max-w-screen-xl">
+        <!-- Cabecera de Navegación Sticky -->
+        <header
+            class="header-sticky-roman sticky top-0 z-20 bg-dark-void bg-opacity-80 backdrop-filter backdrop-blur-xl py-4 shadow-xl mb-16 border-b border-stone-gray">
+            <nav class="grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 justify-center">
+                <a href="#perfil" class="nav-link"><span>PERFIL DE AGENTE</span></a>
+                <a href="#habilidades" class="nav-link"><span>HABILIDADES CLAVE</span></a>
+                <a href="#historico" class="nav-link"><span>HISTORIAL OPERATIVO</span></a>
+                <a href="#personalidad" class="nav-link"><span>RASGOS PERSONALES</span></a>
+                <a href="#monstrum" class="nav-link"><span>COMPAÑERO MONSTRUM</span></a>
+                <a href="#galeria" class="nav-link"><span>ARCHIVOS VISUALES</span></a>
+            </nav>
+        </header>
+        <main class="space-y-24">
+            <!-- Sección: Perfil de Agente -->
+            <section id="perfil" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">PERFIL DE AGENTE: MARCO AURELIO</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-base md:text-xl relative z-10">
+                        <p><strong class="font-semibold text-accent">NOMBRE COMPLETO:</strong> Marco Aurelio</p>
+                        <p><strong class="font-semibold text-accent">APELATIVO:</strong> "El Custodio de Pergaminos",
+                            "Mano Fina"</p>
+                        <p><strong class="font-semibold text-accent">EDAD:</strong> 27 años</p>
+                        <p><strong class="font-semibold text-accent">DIVISIÓN:</strong> Exploradores del Orbis (Unidad
+                            de Investigación y Recuperación)</p>
+                        <p class="text-quote">"Cada fragmento de información, cada línea escrita, es un eslabón vital en
+                            la cadena de la verdad imperial; y yo soy su guardián."</p>
+                    </div>
+                    <div class="relative">
+                        <img src="imagen1.jpg" alt="Marco Aurelio: Detalle del Perfil"
+                            class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image">
+                    </div>
+                </div>
+            </section>
+            <!-- Sección: Habilidades Clave -->
+            <section id="habilidades" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">HABILIDADES CLAVE</h2>
+                <ul class="space-y-8 text-base md:text-xl list-none pl-0">
+                    <li class="relative pl-8">
+                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <strong class="text-accent underline text-xl md:text-2xl">Maestro en Restauración de Documentos
+                            y Artefactos:</strong> Capaz de recuperar y conservar documentos, mapas y objetos antiguos
+                        en el estado más deteriorado.
+                    </li>
+                    <li class="relative pl-8">
+                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <strong class="text-accent underline text-xl md:text-2xl">Perito en Cifrado y Decifrado de
+                            Códices Antiguos:</strong> Un experto en la lectura de sellos, inscripciones y códigos
+                        olvidados o de seguridad imperial.
+                    </li>
+                    <li class="relative pl-8">
+                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <strong class="text-accent underline text-xl md:text-2xl">Precisión Quirúrgica y Análisis
+                            Logístico:</strong> Posee una destreza manual excepcional para manipular mecanismos
+                        delicados y una mente aguda para desentrañar enigmas complejos y planificar expediciones.
+                    </li>
+                    <li class="relative pl-8">
+                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <strong class="text-accent underline text-xl md:text-2xl">Observador Detallista de la
+                            Verdad:</strong> Ningún detalle, por diminuto o aparentemente insignificante, escapa a su
+                        escrutinio, lo que le permite detectar anomalías y pistas vitales ocultas.
+                    </li>
+                </ul>
+            </section>
+            <!-- Sección: Historial Operativo (Origen e Influencias) -->
+            <section id="historico" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">HISTORIAL OPERATIVO</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-base md:text-xl relative z-10">
+                        <p>Marco Aurelio proviene de una <strong class="text-accent">estirpe de bibliotecarios y
+                                escribas imperiales en Roma Nova</strong>, donde la conservación del conocimiento era un
+                            arte familiar y una vocación transmitida por generaciones. Su profunda fascinación por los
+                            secretos ancestrales del Imperio y las civilizaciones caídas lo guio a las filas de los
+                            Exploradores del Orbis.</p>
+                        <p class="text-quote">"El pasado no se olvida jamás. Solo yace oculto, esperando ser descubierto
+                            y comprendido por aquellos con la visión para verlo."</p>
+                        <p>La persona más influyente en su vida fue su <strong class="text-accent">abuela</strong>, una
+                            venerable erudita que le inculcó el valor incalculable de la historia y la ineludible
+                            importancia de desvelar la verdad a través de los registros y artefactos, sin importar su
+                            antigüedad o el peligro de su conocimiento.</p>
+                    </div>
+                    <div class="relative">
+                        <img src="imagen2.jpg" alt="Historial Operativo de Marco Aurelio"
+                            class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image transform rotate-1">
+                    </div>
+                </div>
+            </section>
+            <!-- Sección: Rasgos Personales (Personalidad y Defectos) -->
+            <section id="personalidad" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">RASGOS PERSONALES</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-base md:text-xl relative z-10">
+                        <p>Marco es conocido por su <strong class="text-accent">meticulosa disciplina y su postura
+                                siempre erguida</strong>, digna de un legionario o un maestro ancestral. Sus manos,
+                            largas y extraordinariamente hábiles, son un testimonio viviente de su precisión. Aunque de
+                            complexión delgada, su presencia irradia una calma y concentración inquebrantables.</p>
+                        <p class="text-quote">"La prisa es enemiga de la perfección. Y en nuestro trabajo, la perfección
+                            es la única aliada de la seguridad imperial."</p>
+                        <p class="text-lg leading-relaxed mt-4 italic">Sin embargo, su <strong
+                                class="text-accent">obsesión por el detalle y la perfección</strong> puede llevarle a
+                            ser excesivamente cauteloso en situaciones que demandan inmediatez, y a <strong
+                                class="text-accent">frustrarse profundamente con el desorden o la falta de
+                                rigor</strong> en sus compañeros. A veces, la teoría y la preparación estratégica
+                            prevalecen sobre la acción improvisada en el campo.</p>
+                    </div>
+                    <div class="relative">
+                        <img src="imagen3.jpg" alt="Rasgos Personales de Marco Aurelio"
+                            class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image transform -rotate-1">
+                    </div>
+                </div>
+            </section>
+            <!-- Sección: Compañero Monstrum -->
+            <section id="monstrum" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">COMPAÑERO MONSTRUM: ESENCIA</h2>
+                <div class="flex flex-col items-center mb-8">
+                    <img src="imagen4.jpg" alt="Foto de Esencia el Ivysaur"
+                        class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-2xl border-4 border-ancient-gold mb-4">
+                    <p class="text-3xl md:text-4xl font-bold text-accent">NOMBRE: ESENCIA</p>
+                    <p class="text-xl md:text-2xl text-gray-400">ESPECIE: Ivysaur (Clasificación Imperial: BIO-BOTÁNICA
+                        IV)</p>
+                </div>
+                <p class="text-lg leading-relaxed text-center">
+                    Esencia es un Ivysaur de porte calmado y sereno y una presencia inquebrantable. Un compañero fiable
+                    y paciente, que a menudo sirve como un ancla biológica para la mente analítica de Marco. Sus
+                    propiedades botánicas son útiles para identificar flora ancestral o especies desconocidas para
+                    pigmentos o papeles, para mantener materiales orgánicos frescos (como la tinta o el cuero) o para
+                    ofrecer resistencia y barreras naturales en entornos volátiles. Su particular aroma tranquiliza a
+                    Marco cuando está estresado y sus zarcillos son sorprendentemente delicados, siendo capaces de
+                    manipular objetos frágiles con una precisión asombrosa.
+                </p>
+            </section>
+            <!-- Sección: Archivos Visuales (Galería) -->
+            <section id="galeria" class="content-section animate-on-scroll">
+                <h2 class="section-title title-divider-line text-center">ARCHIVOS VISUALES IMPERIALES</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="gallery-item">
+                        <img src="imagen5.jpg" alt="Archivo Visual 1" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="imagen6.jpg" alt="Archivo Visual 2" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="imagen1.jpg" alt="Archivo Visual 3" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="imagen2.jpg" alt="Archivo Visual 4" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="imagen3.jpg" alt="Archivo Visual 5" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="imagen4.jpg" alt="Archivo Visual 6" class="w-full h-auto rounded-lg">
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Pie de Página -->
+        <footer class="mt-20 text-center border-t border-stone-gray pt-12 pb-8">
+            <p class="text-sm mb-2">"Las verdades del pasado son los cimientos de nuestro futuro
+                imperial."</p>
+            <p class="text-xs">&copy; <span id="currentYear"></span> Archivos Imperiales del Orbis. Todos
+                los derechos reservados.</p>
+            <p class="text-accent text-xs mt-4">Advertencia: Los fenómenos del Orbis son vastos e incomprensibles. La
+                razón es la guía, pero la cautela es el escudo del explorador.</p>
+        </footer>
+    </div>
+    <!-- Script para animaciones y navegación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const startButton = document.getElementById('start-button');
+            // Si la pantalla de inicio existe, manejamos la lógica.
+            if (introScreen && startButton) {
+                // Función para ocultar la pantalla de introducción
+                function hideIntroScreen() {
+                    introScreen.classList.add('hidden');
+                    // Opcionalmente, puedes aquí disparar otras animaciones o sonidos al cargar la página principal
+                }
+                // Event listener para el botón de inicio
+                startButton.addEventListener('click', hideIntroScreen);
+                // Opcional: Para ocultar la pantalla de inicio directamente si se prefiere no usar el botón
+                // introScreen.classList.add('hidden');
+            }
+            // Observador de Intersección para animaciones al hacer scroll
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-reveal');
+                        entry.target.classList.add('animated'); /* Para la línea de acento */
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.animate-on-scroll').forEach(element => {
+                observer.observe(element);
+            });
+            // Lógica para resaltar el enlace de navegación activo
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const header = document.querySelector('header'); // Asegúrate de que 'header' se obtenga correctamente
+            const highlightNavLink = () => {
+                let current = '';
+                sections.forEach(section => {
+                    // Calculamos la posición de la sección ajustando por la altura del header si está pegajoso
+                    const headerOffset = header ? header.offsetHeight : 0;
+                    // El "100" es un ajuste adicional para que la sección se considere activa un poco antes de llegar a su top real,
+                    // lo cual es útil cuando el sticky header ocupa espacio.
+                    const sectionTop = section.offsetTop - headerOffset - 100;
+                    const sectionHeight = section.clientHeight;
+
+                    // Ajuste de threshold para móviles (sección visible aunque solo una parte)
+                    // Consideramos la sección activa si al menos el 10% (móvil) o 30% (desktop) de ella es visible
+                    const thresholdAdjusted = window.innerWidth < 768 ? sectionHeight * 0.1 : sectionHeight * 0.3;
+
+                    if (window.scrollY >= sectionTop - thresholdAdjusted && window.scrollY < sectionTop + sectionHeight - thresholdAdjusted) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    // Comprobamos si el href del enlace contiene el ID de la sección actual
+                    if (link.href && link.href.includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            // Event listeners para scroll y carga de página
+            window.addEventListener('scroll', highlightNavLink);
+            highlightNavLink(); // Llama al inicio para fijar la sección activa al cargar la página
+            // Actualizar año en el pie de página
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+
+</html>
