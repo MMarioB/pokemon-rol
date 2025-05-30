@@ -6,46 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marco Aurelio: Guardián de la Memoria Imperial</title>
 
-    <!-- Optimización: Preconnect para Google Fonts -->
+    <!-- Optimización: Preconnect para Google Fonts e Imágenes/Media si fueran de CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Google Fonts: Cinzel para títulos, Playfair Display para subtítulos (como Trajan), Lora para cuerpo -->
-    <!-- Optimización: font-display: swap para evitar FOUT -->
     <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
 
-    <!-- Optimización: Precarga de imagen principal si fuera única y crítica -->
-    <!-- Si 'imagen1.jpg' es muy grande y aparece en el hero, podrías precargarla.
-         <link rel="preload" as="image" href="imagen1.jpg"> -->
+    <!-- Optimización: Precarga de imagen principal de Hero -->
+    <link rel="preload" as="image" href="imagen1.jpg">
 
     <!-- Tailwind CSS (versión completa para JIT) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* Variables CSS para una paleta temática Romano-Griega Oscura y Misteriosa (OPTIMIZADA) */
+        /* Variables CSS (OPTIMIZADA Y AMPLIADA) */
         :root {
             --color-void-dark: #070707;
-            /* Un negro aún más profundo para el fondo principal */
             --color-panel-base: rgba(18, 18, 18, 0.96);
-            /* Fondo de los paneles, casi opaco */
             --color-accent-gold: #D4AF37;
-            /* Oro más brillante y claro, para mejor visibilidad */
             --color-accent-stone-blue: #6A86B9;
-            /* Azul piedra más vibrante y legible */
             --color-text-light: #FFFFFF;
-            /* Blanco puro para el texto principal */
             --color-text-muted: #D0D0D0;
-            /* Un gris muy claro para el texto secundario */
             --color-border-subtle: rgba(255, 255, 255, 0.12);
-            /* Borde un poco más visible */
 
-            /* Variables para partículas de fondo */
             --particle-color: rgba(255, 255, 255, 0.1);
             --particle-size: 1px;
             --particle-count: 50;
-            /* Número de partículas */
         }
 
         html {
@@ -62,7 +49,6 @@
             background-blend-mode: multiply;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
             position: relative;
-            /* Para las partículas de fondo */
         }
 
         .container {
@@ -84,11 +70,9 @@
             overflow: hidden;
             color: var(--color-text-light);
             opacity: 0;
-            /* Oculto por defecto para animación de revelado */
             transform: translateY(20px);
         }
 
-        /* Animación de Revelado para Secciones */
         .content-section.animated {
             opacity: 1;
             transform: translateY(0);
@@ -113,13 +97,7 @@
             transform: scaleX(1);
         }
 
-        .content-section:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 1), 0 0 35px rgba(212, 175, 55, 0.6);
-            border-color: var(--color-accent-gold);
-        }
-
-        /* Animación al llegar a la sección */
+        /* Animación al llegar a la sección mediante navegación */
         .content-section.nav-target-active {
             animation: pulse-border-gold 1s ease-out;
         }
@@ -127,17 +105,24 @@
         @keyframes pulse-border-gold {
             0% {
                 border-color: rgba(212, 175, 55, 0.2);
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
             }
 
             50% {
                 border-color: var(--color-accent-gold);
+                box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
             }
 
             100% {
                 border-color: var(--color-border-subtle);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.98), 0 0 20px rgba(212, 175, 55, 0.35);
             }
+        }
 
-            /* Vuelve a su estado normal */
+        .content-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 1), 0 0 35px rgba(212, 175, 55, 0.6);
+            border-color: var(--color-accent-gold);
         }
 
         /* Estilo de Títulos (Cinzel y Playfair Display) */
@@ -148,10 +133,54 @@
             color: var(--color-text-light);
             text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 175, 55, 0.2);
             overflow: hidden;
-            /* Necesario para animaciones de texto por caracter/palabra */
+            position: relative;
+            /* Para el brillo */
         }
 
-        /* Clases para animación de texto revelado */
+        /* Efecto de Brillo Sutil en Títulos */
+        .glow-on-view::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            /* Empieza fuera de la vista */
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 80%, transparent);
+            transform: skewX(-20deg);
+            /* Inclina la luz */
+            animation: none;
+            /* Controlado por JS */
+            opacity: 0;
+        }
+
+        .glow-on-view.active-glow::after {
+            animation: title-glow 1.5s forwards ease-out;
+            /* Animación de brillo */
+            opacity: 1;
+        }
+
+        @keyframes title-glow {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Clases para animación de texto revelado (palabra por palabra) */
         .text-reveal-word span {
             display: inline-block;
             transform: translateY(100%);
@@ -240,17 +269,40 @@
         /* Animación para list items en Habilidades */
         .content-section#habilidades ul li {
             position: relative;
-            /* Para el marcador */
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            /* No .animated aquí, JS lo añade */
         }
 
         .content-section#habilidades ul li.revealed {
             /* Clase añadida por JS */
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Animación para los diamantes en Habilidades */
+        .content-section#habilidades ul li.revealed .diamond-icon {
+            animation: diamond-sparkle 0.8s ease-out forwards;
+            display: inline-block;
+            /* Asegura que la rotación se aplique correctamente */
+            transform-origin: center center;
+        }
+
+        @keyframes diamond-sparkle {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2) rotate(360deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
 
         /* Navegación: Como losas grabadas */
@@ -268,6 +320,12 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
             transition: all 0.3s ease-in-out;
             outline: none;
+        }
+
+        .nav-link:focus-visible {
+            /* Estilo de foco para accesibilidad */
+            outline: 2px solid var(--color-accent-gold);
+            outline-offset: 2px;
         }
 
         .nav-link::before {
@@ -319,9 +377,12 @@
             }
         }
 
-        /* Hero Section - Más solemne y misteriosa */
+        /* Hero Section - Mejora de carga de imagen de fondo + efecto de oscurecimiento */
         .hero-section {
-            background-image: url('imagen1.jpg');
+            background-color: rgba(0, 0, 0, 0.8);
+            /* LQIP de color */
+            background-image: url("imagen1.jpg");
+            /* La imagen real se carga encima */
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -334,7 +395,15 @@
             border-bottom: 5px solid var(--color-accent-gold);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
             perspective: 1000px;
-            /* Para efecto 3D en partículas */
+            /* transicion para background-image al cargar: JS lo hará con una clase */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1a1a1a"/></svg>');
+            /* Placeholder oscuro */
+        }
+
+        .hero-section.image-loaded {
+            background-image: url('imagen1.jpg');
+            transition: background-image 1s ease-in-out;
+            /* Transición suave de la imagen */
         }
 
         .hero-overlay {
@@ -350,20 +419,12 @@
             border: 1px solid var(--color-accent-gold);
             text-align: center;
             position: relative;
-            /* Para z-index sobre partículas */
             z-index: 2;
-        }
-
-        .hero-content p.text-xl {
-            color: var(--color-text-muted);
-            font-size: clamp(1rem, 4vw, 3em);
-            padding: 0 1rem;
-            box-sizing: border-box;
         }
 
         /* Efecto de desvanecimiento para texto en Hero al scroll */
         .hero-fade-text {
-            transition: opacity 0s;
+            transition: opacity 0s, transform 0s;
             /* Controlado por JS, no CSS smoothing */
         }
 
@@ -376,7 +437,6 @@
             height: 100%;
             overflow: hidden;
             z-index: 1;
-            /* Detrás del contenido */
         }
 
         .particle {
@@ -384,16 +444,12 @@
             background-color: var(--particle-color);
             border-radius: 50%;
             filter: blur(0.5px);
-            /* Suaviza los bordes */
             opacity: 0;
             animation: particle-anim 20s infinite ease-in-out;
-            /* Animación de movimiento */
             animation-delay: var(--delay);
             width: var(--particle-size);
             height: var(--particle-size);
             transform: translateZ(var(--z-index));
-            /* Para efecto 3D */
-            /* Se establece en JS el top, left, size, delay, z-index */
         }
 
         @keyframes particle-anim {
@@ -413,7 +469,7 @@
             }
         }
 
-        /* Galería e Imágenes: Como hallazgos antiguos */
+        /* Galería e Imágenes: Efecto Hover Tilt/Parallax */
         .gallery-item {
             position: relative;
             transform-style: preserve-3d;
@@ -429,19 +485,19 @@
             display: block;
             width: 100%;
             pointer-events: none;
-            /* Las imágenes no interfieren con el JS del padre */
         }
 
-        /* Efecto Hover Tilt/Parallax para galería */
         .gallery-item.tilt-active {
-            transition: transform 0.1s linear;
-            /* Muy rápido */
+            transition: none;
+            /* Desactiva la transición para el movimiento del tilt */
         }
 
         .gallery-item.tilt-active img {
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 15px var(--color-accent-gold);
             border-color: var(--color-accent-gold);
             filter: grayscale(0%) contrast(100%) brightness(100%);
+            transition: transform 0.1s linear;
+            /* Muy rápido para el movimiento */
         }
 
         /* Footer: Columna de cierre */
@@ -456,11 +512,8 @@
             font-family: 'Cinzel', serif;
             letter-spacing: 0.05em;
             position: relative;
-            /* Para partículas */
             overflow: hidden;
-            /* Para partículas */
             z-index: 0;
-            /* Para asegurar que las partículas se queden dentro */
         }
 
         /* Pantalla de inicio - Temática revisada */
@@ -480,7 +533,58 @@
             transition: opacity 0.7s ease-in-out;
             color: var(--color-text-light);
             perspective: 1000px;
-            /* Para efecto 3D en partículas aqui también si se quieren */
+        }
+
+        /* Efecto Glitch para texto de Intro */
+        #intro-screen h2.glitch-effect {
+            animation: glitch-text 0.8s infinite alternate steps(2, end);
+            text-shadow:
+                0.05em 0 0 rgba(255, 0, 0, 0.75),
+                -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            /* Elimina el shadow original si usas este */
+        }
+
+        @keyframes glitch-text {
+            0% {
+                transform: translate(5px, 5px) skewX(5deg);
+                filter: blur(0.5px);
+            }
+
+            15% {
+                transform: translate(-5px, -5px) skewX(-5deg);
+                filter: blur(0.2px);
+            }
+
+            30% {
+                transform: translate(0, 0) skewX(0deg);
+                filter: blur(0);
+            }
+
+            45% {
+                transform: translate(5px, -2px) skewX(2deg);
+                filter: blur(0.3px);
+            }
+
+            60% {
+                transform: translate(-3px, 3px) skewX(-3deg);
+                filter: blur(0.1px);
+            }
+
+            75% {
+                transform: translate(0, 0) skewX(0deg);
+                filter: blur(0);
+            }
+
+            90% {
+                transform: translate(-2px, -5px) skewX(5deg);
+                filter: blur(0.4px);
+            }
+
+            100% {
+                transform: translate(0, 0) skewX(0deg);
+                filter: blur(0);
+            }
         }
 
         #start-button {
@@ -524,7 +628,6 @@
             padding: 0 1rem;
             box-sizing: border-box;
             overflow: hidden;
-            /* Importante para el text-reveal */
         }
 
         @keyframes pulse-gold {
@@ -556,7 +659,6 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            /* Asegura que no se pueda interactuar */
         }
 
         /* Ajustes adicionales para contraste en el contenido de texto */
@@ -632,6 +734,31 @@
         #back-to-top:active {
             transform: translateY(0);
         }
+
+        /* Controles de audio */
+        #audio-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 995;
+            background-color: rgba(25, 25, 25, 0.7);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.2s;
+            color: var(--color-accent-gold);
+            font-size: 1.2rem;
+        }
+
+        #audio-control:hover {
+            background-color: rgba(40, 40, 40, 0.9);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -641,7 +768,7 @@
 
     <!-- Pantalla de Bienvenida -->
     <div id="intro-screen">
-        <h2 class="text-reveal-word">GUARDIANES DE LA MEMORIA IMPERIAL</h2>
+        <h2 class="text-reveal-word glitch-effect">GUARDIANES DE LA MEMORIA IMPERIAL</h2>
         <p>Los ecos de la antigüedad susurran verdades olvidadas.</p>
         <button id="start-button" aria-label="Acceder a la Ficha Clasificada">ACCEDER A LA FICHA CLASIFICADA</button>
     </div>
@@ -651,8 +778,8 @@
         <div class="hero-overlay absolute inset-0"></div>
         <!-- Partículas de fondo en Hero -->
         <div class="particles-container"></div>
-        <div class="hero-content relative z-10 animate-fade-in-scale">
-            <p class="hero-fade-text text-xl text-yellow-200 mb-3 uppercase tracking-widest leading-none">
+        <div class="hero-content relative z-10">
+            <p class="hero-fade-text text-xl mb-3 uppercase tracking-widest leading-none">
                 EXPEDIENTE DE AGENTE CALIFICADO
             </p>
             <h1 class="main-heading hero-fade-text text-reveal-word font-bold mb-4 leading-tight">
@@ -688,8 +815,8 @@
         <main role="main" class="space-y-24">
             <!-- Sección: Perfil de Agente -->
             <section id="perfil" class="content-section animate-on-scroll" role="region" aria-labelledby="perfil-title">
-                <h2 id="perfil-title" class="section-title title-divider-line text-center">PERFIL DE AGENTE: MARCO
-                    AURELIO</h2>
+                <h2 id="perfil-title" class="section-title title-divider-line text-center glow-on-view">PERFIL DE
+                    AGENTE: MARCO AURELIO</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p><strong class="font-semibold text-accent">NOMBRE COMPLETO:</strong> Marco Aurelio</p>
@@ -711,28 +838,29 @@
             <!-- Sección: Habilidades Clave -->
             <section id="habilidades" class="content-section animate-on-scroll" role="region"
                 aria-labelledby="habilidades-title">
-                <h2 id="habilidades-title" class="section-title title-divider-line text-center">HABILIDADES CLAVE</h2>
+                <h2 id="habilidades-title" class="section-title title-divider-line text-center glow-on-view">HABILIDADES
+                    CLAVE</h2>
                 <ul class="space-y-8 text-base md:text-xl list-none pl-0">
                     <li class="relative pl-8">
-                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <span class="absolute left-0 text-accent text-3xl leading-none diamond-icon">♦</span>
                         <strong class="text-accent underline text-xl md:text-2xl">Maestro en Restauración de Documentos
                             y Artefactos:</strong> Capaz de recuperar y conservar documentos, mapas y objetos antiguos
                         en el estado más deteriorado.
                     </li>
                     <li class="relative pl-8">
-                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <span class="absolute left-0 text-accent text-3xl leading-none diamond-icon">♦</span>
                         <strong class="text-accent underline text-xl md:text-2xl">Perito en Cifrado y Decifrado de
                             Códices Antiguos:</strong> Un experto en la lectura de sellos, inscripciones y códigos
                         olvidados o de seguridad imperial.
                     </li>
                     <li class="relative pl-8">
-                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <span class="absolute left-0 text-accent text-3xl leading-none diamond-icon">♦</span>
                         <strong class="text-accent underline text-xl md:text-2xl">Precisión Quirúrgica y Análisis
                             Logístico:</strong> Posee una destreza manual excepcional para manipular mecanismos
                         delicados y una mente aguda para desentrañar enigmas complejos y planificar expediciones.
                     </li>
                     <li class="relative pl-8">
-                        <span class="absolute left-0 text-accent text-3xl leading-none">♦</span>
+                        <span class="absolute left-0 text-accent text-3xl leading-none diamond-icon">♦</span>
                         <strong class="text-accent underline text-xl md:text-2xl">Observador Detallista de la
                             Verdad:</strong> Ningún detalle, por diminuto o aparentemente insignificante, escapa a su
                         escrutinio, lo que le permite detectar anomalías y pistas vitales ocultas.
@@ -743,7 +871,8 @@
             <!-- Sección: Historial Operativo (Origen e Influencias) -->
             <section id="historico" class="content-section animate-on-scroll" role="region"
                 aria-labelledby="historico-title">
-                <h2 id="historico-title" class="section-title title-divider-line text-center">HISTORIAL OPERATIVO</h2>
+                <h2 id="historico-title" class="section-title title-divider-line text-center glow-on-view">HISTORIAL
+                    OPERATIVO</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p>Marco Aurelio proviene de una <strong class="text-accent">estirpe de bibliotecarios y
@@ -768,7 +897,8 @@
             <!-- Sección: Rasgos Personales (Personalidad y Defectos) -->
             <section id="personalidad" class="content-section animate-on-scroll" role="region"
                 aria-labelledby="personalidad-title">
-                <h2 id="personalidad-title" class="section-title title-divider-line text-center">RASGOS PERSONALES</h2>
+                <h2 id="personalidad-title" class="section-title title-divider-line text-center glow-on-view">RASGOS
+                    PERSONALES</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="space-y-6 text-base md:text-xl relative z-10">
                         <p>Marco es conocido por su <strong class="text-accent">meticulosa disciplina y su postura
@@ -794,8 +924,8 @@
             <!-- Sección: Compañero Monstrum -->
             <section id="monstrum" class="content-section animate-on-scroll" role="region"
                 aria-labelledby="monstrum-title">
-                <h2 id="monstrum-title" class="section-title title-divider-line text-center">COMPAÑERO MONSTRUM: ESENCIA
-                </h2>
+                <h2 id="monstrum-title" class="section-title title-divider-line text-center glow-on-view">COMPAÑERO
+                    MONSTRUM: ESENCIA</h2>
                 <div class="flex flex-col items-center mb-8">
                     <img src="imagen4.jpg" alt="Foto de Esencia el Ivysaur" loading="lazy"
                         class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-2xl border-4 border-ancient-gold mb-4">
@@ -817,8 +947,8 @@
             <!-- Sección: Archivos Visuales (Galería) -->
             <section id="galeria" class="content-section animate-on-scroll" role="region"
                 aria-labelledby="galeria-title">
-                <h2 id="galeria-title" class="section-title title-divider-line text-center">ARCHIVOS VISUALES IMPERIALES
-                </h2>
+                <h2 id="galeria-title" class="section-title title-divider-line text-center glow-on-view">ARCHIVOS
+                    VISUALES IMPERIALES</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="gallery-item">
                         <img src="imagen5.jpg" alt="Archivo Visual 1" loading="lazy">
@@ -860,6 +990,19 @@
         &#9650; <!-- Flecha hacia arriba como carácter HTML -->
     </button>
 
+    <!-- Audio para sonido ambiental -->
+    <audio id="ambient-audio" loop preload="auto">
+        <!-- Puedes usar un sonido sutil de fondo, como susurros antiguos o algo ambiental -->
+        <!-- Asegúrate de tener un archivo de audio (ej: .mp3, .ogg) en la misma carpeta o con un path válido -->
+        <source src="ancient_whispers.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Botón de control de audio -->
+    <button id="audio-control" aria-label="Controlar sonido ambiental" title="Silenciar/Activar sonido">
+        🔇
+    </button>
+
     <!-- Script para animaciones y navegación -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -871,48 +1014,116 @@
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-link');
             const header = document.querySelector('header');
+            const ambientAudio = document.getElementById('ambient-audio');
+            const audioControl = document.getElementById('audio-control');
+
+            let lastClickedNavLink = null; // Para guardar la última sección clickeada
 
             // --- Utilidades ---
-            function splitTextIntoWords(element) {
+            function splitTextIntoWords(element, className = 'text-reveal-word') {
                 const text = element.textContent;
                 element.innerHTML = '';
                 const words = text.split(' ').filter(word => word.length > 0);
                 words.forEach(word => {
                     const wordSpan = document.createElement('span');
-                    wordSpan.textContent = word + ' ';
+                    wordSpan.textContent = word + ' '; // Añadir espacio de vuelta
                     element.appendChild(wordSpan);
                 });
+                element.classList.add(className);
             }
 
             function generateRandom(min, max) {
                 return Math.random() * (max - min) + min;
             }
 
+            // --- Control de Audio Ambiental ---
+            let isAudioPlaying = false;
+            let userInteracted = false; // Flag para saber si el usuario ha interactuado
+
+            // Función para alternar audio
+            function toggleAudio() {
+                if (ambientAudio.paused) {
+                    ambientAudio.play().then(() => {
+                        audioControl.textContent = '🔊';
+                        isAudioPlaying = true;
+                    }).catch(error => {
+                        console.warn("Autoplay prevented:", error);
+                        // Mostrar mensaje de que se requiere interacción para el audio
+                        // o dejarlo en muted hasta que el usuario lo active
+                        audioControl.textContent = '🔇';
+                        isAudioPlaying = false;
+                    });
+                } else {
+                    ambientAudio.pause();
+                    audioControl.textContent = '🔊'; // Icono de sonido activo al pausar por si el usuario lo activa
+                    isAudioPlaying = false;
+                }
+            }
+
+            // Click en el control de audio
+            audioControl.addEventListener('click', toggleAudio);
+
+            // Intentar reproducir el audio cuando se detecta la primera interacción del usuario
+            function handleFirstUserInteraction() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    // Intentar reproducir el audio. Esto ya lo controlaba toggleAudio.
+                    // Podemos ponerlo en play muted por defecto si no es posible el autoplay
+                    ambientAudio.muted = false; // Si se empieza clickando, desmutear
+                    toggleAudio(); // Intentar reproducir
+                    document.removeEventListener('click', handleFirstUserInteraction);
+                    document.removeEventListener('keydown', handleFirstUserInteraction);
+                }
+            }
+
+            document.addEventListener('click', handleFirstUserInteraction, { once: true });
+            document.addEventListener('keydown', handleFirstUserInteraction, { once: true });
+
+            // Por si el autoplay no es posible
+            ambientAudio.muted = true; // Por defecto muteado
+            audioControl.textContent = '🔇'; // Icono de mute
+
             // --- Pantalla de Bienvenida ---
             if (introScreen && startButton) {
-                // Preparar títulos para animación de revelado
-                document.querySelectorAll('.text-reveal-word').forEach(element => {
-                    splitTextIntoWords(element);
-                });
+                const introTitle = introScreen.querySelector('h2.text-reveal-word');
+                if (introTitle) {
+                    // Inicializar el título para animación de texto
+                    splitTextIntoWords(introTitle);
+                    // Retraso para que el "glitch" y la animación de texto inicien juntos
+                    setTimeout(() => {
+                        introTitle.classList.add('revealed'); // Inicia animación de texto
+                        // Opcional: Desactivar glitch al finalizar animación de revelado
+                        // introTitle.addEventListener('animationend', () => {
+                        //     introTitle.classList.remove('glitch-effect');
+                        // }, {once: true});
+                    }, 500);
+                }
 
                 startButton.addEventListener('click', () => {
                     introScreen.classList.add('hidden');
                     // Iniciar animación de los títulos del hero una vez que la pantalla de intro se oculta
                     const heroTitles = heroSection.querySelectorAll('.text-reveal-word');
                     heroTitles.forEach((title, index) => {
+                        splitTextIntoWords(title); // Asegurarse de que el texto esté dividido
                         setTimeout(() => {
                             title.classList.add('revealed');
-                        }, index * 200); // 200ms de delay entre cada título (si hubiera varios)
+                        }, index * 200 + 500); // Pequeño delay adicional para que no sea instantáneo tras la intro
                     });
+                    // Intentar reproducir audio al entrar
+                    if (!userInteracted) { // Si el usuario no ha interactuado antes de clickar el botón
+                        ambientAudio.muted = false; // Desmutear
+                        ambientAudio.play().then(() => {
+                            audioControl.textContent = '🔊';
+                            isAudioPlaying = true;
+                        }).catch(error => {
+                            console.warn("Autoplay blocked, keeping audio muted:", error);
+                            audioControl.textContent = '🔇';
+                            ambientAudio.muted = true; // Mantener muteado si no se pudo auto-reproducir
+                            isAudioPlaying = false;
+                        });
+                        userInteracted = true;
+                    }
                 });
-                // Animar el título de la pantalla de inicio al cargar
-                const introTitle = introScreen.querySelector('h2.text-reveal-word');
-                if (introTitle) {
-                    splitTextIntoWords(introTitle);
-                    setTimeout(() => {
-                        introTitle.classList.add('revealed');
-                    }, 500); // Pequeño delay para que se vea la animación al aparecer
-                }
             }
 
             // --- Observador de Intersección para animaciones al hacer scroll ---
@@ -922,27 +1133,27 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add('animated');
 
-                        // Animación de texto revelado para section-titles
+                        // Animación de texto revelado para section-titles y efecto glow
                         const sectionTitle = entry.target.querySelector('.section-title');
                         if (sectionTitle) {
-                            if (!sectionTitle.classList.contains('text-reveal-word')) { // Asegura que solo se prepare una vez
+                            if (!sectionTitle.classList.contains('text-reveal-word')) {
                                 splitTextIntoWords(sectionTitle);
-                                sectionTitle.classList.add('text-reveal-word');
                             }
-                            if (!sectionTitle.classList.contains('revealed')) { // Solo anima si no ha sido revelado
+                            if (!sectionTitle.classList.contains('revealed')) {
                                 setTimeout(() => {
                                     sectionTitle.classList.add('revealed');
-                                }, 300); // Pequeño delay después de que la sección aparece
+                                    sectionTitle.classList.add('active-glow'); // Activar el brillo
+                                }, 300);
                             }
                         }
 
-                        // Animación de list items en Habilidades con delay escalonado
+                        // Animación de list items en Habilidades con delay escalonado y diamantes
                         if (entry.target.id === 'habilidades') {
                             const listItems = entry.target.querySelectorAll('ul li');
                             listItems.forEach((item, index) => {
                                 setTimeout(() => {
                                     item.classList.add('revealed');
-                                }, index * 100); // 100ms de delay por cada item
+                                }, index * 100);
                             });
                         }
                         observer.unobserve(entry.target);
@@ -950,7 +1161,7 @@
                 });
             }, observerOptions);
 
-            document.querySelectorAll('.content-section').forEach(element => { // Observar todas las content-sections
+            document.querySelectorAll('.content-section').forEach(element => {
                 observer.observe(element);
             });
 
@@ -978,7 +1189,6 @@
             window.addEventListener('scroll', highlightNavLink);
             highlightNavLink();
 
-            // Animación al hacer click en un enlace de navegación
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -986,24 +1196,27 @@
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                        // Desactivar animaciones anteriores
-                        document.querySelectorAll('.content-section.nav-target-active').forEach(sec => {
-                            sec.classList.remove('nav-target-active');
-                        });
+                        // Eliminar clase `nav-target-active` de la sección anterior clickeada
+                        if (lastClickedNavLink && lastClickedNavLink.targetSection) {
+                            lastClickedNavLink.targetSection.classList.remove('nav-target-active');
+                        }
 
-                        // Scroll suave
-                        const offsetTop = targetSection.offsetTop - (header ? header.offsetHeight : 0) - 10; // Ajuste para que se vea bien
+                        const offsetTop = targetSection.offsetTop - (header ? header.offsetHeight : 0) - 10;
                         window.scrollTo({
                             top: offsetTop,
                             behavior: 'smooth'
                         });
 
-                        // Añadir clase para animación de borde
+                        // Marcar esta sección como la última clickeada para que reciba la animación
+                        lastClickedNavLink = { link, targetSection };
                         targetSection.classList.add('nav-target-active');
-                        // Eliminar la clase después de la animación para futuras activaciones
-                        targetSection.addEventListener('animationend', () => {
+
+                        // Eliminar la clase después de la animación (usando una promesa para asegurar el 'once')
+                        const handleAnimationEnd = () => {
                             targetSection.classList.remove('nav-target-active');
-                        }, { once: true });
+                            targetSection.removeEventListener('animationend', handleAnimationEnd);
+                        };
+                        targetSection.addEventListener('animationend', handleAnimationEnd);
                     }
                 });
             });
@@ -1023,20 +1236,28 @@
             const applyParallaxAndFade = () => {
                 if (heroSection) {
                     const scrolled = window.scrollY;
-                    // Paralaje de fondo
                     heroSection.style.backgroundPositionY = `calc(50% + ${scrolled * 0.3}px)`;
 
-                    // Efecto de desvanecimiento para texto
                     const heroHeight = heroSection.offsetHeight;
                     heroTextElements.forEach(el => {
-                        const opacity = 1 - Math.max(0, (scrolled - (heroHeight * 0.3)) / (heroHeight * 0.4)); // Desvanece entre 30% y 70% del scroll del hero
+                        const opacity = 1 - Math.max(0, (scrolled - (heroHeight * 0.3)) / (heroHeight * 0.4));
                         el.style.opacity = Math.max(0, opacity);
-                        el.style.transform = `translateY(${scrolled * 0.1}px)`; // Ligero movimiento hacia arriba
+                        el.style.transform = `translateY(${scrolled * 0.1}px)`;
                     });
                 }
             };
             window.addEventListener('scroll', applyParallaxAndFade);
             applyParallaxAndFade();
+
+            // --- Lazy Load de Imagen de Hero (Background Image) ---
+            const heroBgImg = new Image();
+            heroBgImg.src = heroSection.style.backgroundImage.slice(5, -2); // Extraer URL de la imagen de fondo
+            // heroBgImg.src = "imagen1.jpg"; // Si no quieres sacar la URL del CSS
+
+            heroBgImg.onload = () => {
+                heroSection.classList.add('image-loaded'); // Agrega la clase que tiene la transición
+            };
+
 
             // --- Back to Top Button ---
             const toggleBackToTopButton = () => {
@@ -1057,22 +1278,31 @@
             });
 
             // --- Partículas de Fondo ---
-            function createParticles(container, count) {
-                const particlesContainer = container.querySelector('.particles-container');
-                if (!particlesContainer) return; // Si no hay contenedor de partículas, no hacer nada
+            function createParticles(containerElement, count, isFixed = false) {
+                const particlesContainer = containerElement.querySelector('.particles-container');
+                if (!particlesContainer) return;
+
+                // Limpiar partículas existentes para evitar duplicados al recargar JS
+                particlesContainer.innerHTML = '';
 
                 for (let i = 0; i < count; i++) {
                     const particle = document.createElement('div');
                     particle.classList.add('particle');
-                    const size = generateRandom(1, 3);
-                    const delay = generateRandom(0, 20); // Retraso de animación
-                    const startX = generateRandom(0, 100);
-                    const startY = generateRandom(0, 100);
-                    const midX = generateRandom(0, 100);
-                    const midY = generateRandom(0, 100);
-                    const endX = generateRandom(0, 100);
-                    const endY = generateRandom(0, 100);
-                    const zIndex = generateRandom(-100, 100); // Para efecto 3D Z-index
+                    const size = generateRandom(0.8, 2); // ligeras variaciones de tamaño
+                    const delay = generateRandom(0, 15); // Variación del retraso de animación
+                    const duration = generateRandom(15, 30); // Variación de la duración
+
+                    // Asegurar que las partículas comiencen y terminen fuera de la vista
+                    const startX = generateRandom(-10, 110);
+                    const startY = generateRandom(-10, 110);
+                    const endX = generateRandom(-20, 120);
+                    const endY = generateRandom(-20, 120);
+
+                    // Pequeñas desviaciones para el punto medio
+                    const midX = (startX + endX) / 2 + generateRandom(-20, 20);
+                    const midY = (startY + endY) / 2 + generateRandom(-20, 20);
+
+                    const zIndex = generateRandom(-100, 100);
 
                     particle.style.setProperty('--particle-size', `${size}px`);
                     particle.style.setProperty('--delay', `${delay}s`);
@@ -1082,45 +1312,49 @@
                     particle.style.setProperty('--mid-y', `${midY}vh`);
                     particle.style.setProperty('--end-x', `${endX}vw`);
                     particle.style.setProperty('--end-y', `${endY}vh`);
-                    particle.style.setProperty('--z-index', `${zIndex}px`); // Assign Z for 3D effect
+                    particle.style.setProperty('--z-index', `${zIndex}px`);
+                    particle.style.animationDuration = `${duration}s`;
 
                     particlesContainer.appendChild(particle);
                 }
             }
 
-            createParticles(heroSection, 80); // 80 partículas en el Hero
-            createParticles(document.querySelector('footer'), 60); // 60 partículas en el Footer
+            createParticles(heroSection, 80);
+            createParticles(document.querySelector('footer'), 60);
 
             // --- Hover con efecto Tilt/Parallax en Galería ---
             const galleryItems = document.querySelectorAll('.gallery-item');
             galleryItems.forEach(item => {
                 const img = item.querySelector('img');
-                const MAX_ROTATION = 8; // Grados máximos de rotación
-                const MAX_TRANSLATION = 10; // Píxeles máximos de traslación
+                const MAX_ROTATION = 8;
+                const MAX_TRANSLATION_IMG = 10; // Traslación solo en la imagen, no en el item
+                const MAX_TRANSLATION_ITEM = 5; // Traslación del item entero (para simular profundidad)
 
                 item.addEventListener('mousemove', (e) => {
                     const rect = item.getBoundingClientRect();
-                    const x = e.clientX - rect.left; // Posición X dentro del elemento
-                    const y = e.clientY - rect.top;  // Posición Y dentro del elemento
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
 
-                    // Calcular inclinación
-                    const rotateX = ((y - centerY) / centerY) * -MAX_ROTATION; // Rotación inversa para efecto 3D
+                    const rotateX = ((y - centerY) / centerY) * -MAX_ROTATION;
                     const rotateY = ((x - centerX) / centerX) * MAX_ROTATION;
 
-                    // Calcular traslación (efecto mouse por detrás)
-                    const translateX = ((x - centerX) / centerX) * MAX_TRANSLATION;
-                    const translateY = ((y - centerY) / centerY) * MAX_TRANSLATION;
+                    const translateXImg = ((x - centerX) / centerX) * MAX_TRANSLATION_IMG;
+                    const translateYImg = ((y - centerY) / centerY) * MAX_TRANSLATION_IMG;
 
-                    item.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    img.style.transform = `translateX(${translateX}px) translateY(${translateY}px) scale(1.02)`; // Ligero zoom también
+                    const translateXItem = ((x - centerX) / centerX) * MAX_TRANSLATION_ITEM;
+                    const translateYItem = ((y - centerY) / centerY) * MAX_TRANSLATION_ITEM;
+
+
+                    item.style.transform = `translate(${translateXItem}px, ${translateYItem}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+                    img.style.transform = `translateX(${translateXImg}px) translateY(${translateYImg}px) scale(1.02)`;
                     item.classList.add('tilt-active');
                 });
 
                 item.addEventListener('mouseleave', () => {
-                    item.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    item.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg) scale(1)`;
                     img.style.transform = `translateX(0px) translateY(0px) scale(1)`;
                     item.classList.remove('tilt-active');
                 });
