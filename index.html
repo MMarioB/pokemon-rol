@@ -12,12 +12,12 @@
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
     <style>
-        /* Variables CSS para una paleta temática Romano-Griega Oscura y Misteriosa (MEJORADO PARA LEGIBILIDAD) */
+        /* Variables CSS para una paleta temática Romano-Griega Oscura y Misteriosa (OPTIMIZADA) */
         :root {
-            --color-void-dark: #0A0A0A;
+            --color-void-dark: #070707;
             /* Un negro aún más profundo para el fondo principal */
-            --color-panel-base: rgba(18, 18, 18, 0.95);
-            /* Fondo de los paneles, ligeramente más claro y opaco */
+            --color-panel-base: rgba(18, 18, 18, 0.96);
+            /* Fondo de los paneles, casi opaco */
             --color-accent-gold: #D4AF37;
             /* Oro más brillante y claro, para mejor visibilidad */
             --color-accent-stone-blue: #6A86B9;
@@ -26,7 +26,7 @@
             /* Blanco puro para el texto principal */
             --color-text-muted: #D0D0D0;
             /* Un gris muy claro para el texto secundario */
-            --color-border-subtle: rgba(255, 255, 255, 0.1);
+            --color-border-subtle: rgba(255, 255, 255, 0.12);
             /* Borde un poco más visible */
         }
 
@@ -38,11 +38,10 @@
             font-family: 'Lora', serif;
             background-color: var(--color-void-dark);
             color: var(--color-text-light);
-            /* Aseguramos que el texto principal use el blanco puro */
             line-height: 1.8;
             /* Patrón de mosaico geométrico sutil y oscuro, para simular un suelo antiguo */
-            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><pattern id="roman-mosaic" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h5v5H0zM5 5h5v5H5z" fill="%23141414" /><path d="M5 0h5v5H5zM0 5h5v5H0z" fillOpacity=".08" fill="%23666"/></pattern><rect width="100%" height="100%" fill="url(%23roman-mosaic)" /></svg>');
-            /* Ligeramente más claro */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><pattern id="roman-mosaic" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h5v5H0zM5 5h5v5H5z" fill="%23101010" /><path d="M5 0h5v5H5zM0 5h5v5H0z" fillOpacity=".04" fill="%23666"/></pattern><rect width="100%" height="100%" fill="url(%23roman-mosaic)" /></svg>');
+            /* Más sutil */
             background-attachment: fixed;
             background-blend-mode: multiply;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>') 12 12, auto;
@@ -57,12 +56,11 @@
         /* Contenido de Sección: Los "bloques de piedra" de información */
         .content-section {
             background-color: var(--color-panel-base);
-            backdrop-filter: blur(8px) grayscale(10%) brightness(90%);
-            /* Menos gris, más brillante, blur más pronunciado */
+            backdrop-filter: blur(10px) grayscale(5%) brightness(95%);
+            /* Mayor blur, menos gris, más brillante */
             border: 1px solid var(--color-border-subtle);
             border-radius: 4px;
-            /* Pequeños bordes para sensación de bloque tallado */
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.95), 0 0 15px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.98), 0 0 20px rgba(212, 175, 55, 0.35);
             /* Sombra más pronunciada, glow dorado más brillante */
             padding: 3rem;
             transition: all 0.5s ease-in-out;
@@ -70,10 +68,22 @@
             overflow: hidden;
             color: var(--color-text-light);
             /* Asegurar que el texto dentro del panel sea light */
+            opacity: 0;
+            /* Oculto por defecto para animación de revelado */
+            transform: translateY(20px);
+            /* Ligeramente hacia abajo */
         }
 
+        /* Animación de Revelado para Secciones */
+        .content-section.animated {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* Transición más larga y suave */
+        }
+
+        /* Línea Decorativa Superior */
         .content-section::before {
-            /* Línea decorativa superior */
             content: '';
             position: absolute;
             top: 0;
@@ -94,11 +104,9 @@
 
         .content-section:hover {
             transform: translateY(-10px);
-            /* Flota más al pasar el ratón */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 1), 0 0 30px rgba(212, 175, 55, 0.5);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 1), 0 0 35px rgba(212, 175, 55, 0.6);
             /* Sombra más intensa y resplandor al hover */
             border-color: var(--color-accent-gold);
-            /* Borde se vuelve dorado */
         }
 
         /* Estilo de Títulos (Cinzel y Playfair Display) */
@@ -107,20 +115,14 @@
         h3 {
             font-family: 'Cinzel', serif;
             color: var(--color-text-light);
-            /* Blanco puro para todos los títulos */
             text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 175, 55, 0.2);
-            /* Sombra para profundidad y resplandor sutil (ajustado brillo) */
         }
 
         .main-heading {
             /* Para el H1 del héroe */
             font-family: 'Playfair Display', serif;
-            /* Una fuente más fluida y elegante para el nombre, como si fuera una firma */
             text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(255, 255, 255, 0.5);
-            /* Sombra blanca para contraste, aumentada opacidad */
             color: white;
-            /* Blanco puro para impactar */
-            /* clamp para h1 de hero */
             font-size: clamp(3rem, 12vw, 8em);
             /* Mínimo 3rem, ideal 12vw, máximo 8em */
             padding: 0 1rem;
@@ -132,19 +134,14 @@
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            /* Espacio extra para efecto de inscripción */
             color: var(--color-text-light);
-            /* Aseguramos que el título de sección sea blanco puro */
-            /* clamp para section-title */
             font-size: clamp(1.8rem, 7vw, 4.5rem);
             /* Ajustado para responsive */
             padding: 0 0.5rem;
-            /* Pequeño padding para no tocar los bordes */
             box-sizing: border-box;
         }
 
         .title-divider-line {
-            /* Línea divisoria de título más elaborada */
             position: relative;
             padding-bottom: 25px;
             margin-bottom: 40px;
@@ -160,7 +157,6 @@
             height: 2px;
             background: linear-gradient(to right, transparent 0%, var(--color-accent-gold) 10%, var(--color-accent-gold) 90%, transparent 100%);
             opacity: 0.8;
-            /* Opacidad aumentada para la línea dorada */
             animation: pulse-line 3s infinite alternate;
         }
 
@@ -184,51 +180,54 @@
         /* Estilo de Textos y Citas */
         .text-accent {
             color: var(--color-accent-gold);
-            /* Oro para datos clave, ahora más brillante */
             font-weight: 700;
         }
 
         .text-quote {
             font-family: 'Lora', serif;
-            /* Mismo cuerpo de texto */
             font-style: italic;
             color: var(--color-text-muted);
-            /* Texto atenuado, ahora más claro */
             border-left: 5px solid var(--color-accent-stone-blue);
-            /* Borde de cita en azul piedra, ahora más visible */
             padding-left: 20px;
             margin-top: 25px;
             font-size: 1.15em;
             line-height: 1.5;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-            /* Sombra más pronunciada en el texto de la cita */
         }
 
+        /* Animación para list items en Habilidades */
+        .content-section#habilidades ul li {
+            opacity: 0;
+            /* Oculto por defecto */
+            transform: translateY(10px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .content-section#habilidades.animated ul li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delay escalonado para li (JS lo aplicará) */
         /* Navegación: Como losas grabadas */
         .nav-link {
             position: relative;
             color: var(--color-text-muted);
-            /* Color inicial del enlace más claro */
             font-family: 'Cinzel', serif;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            /* Más espacio en navegación */
             padding: 14px 18px;
-            /* Más grande y prominente */
             border-radius: 2px;
-            /* Esquinas muy sutiles para efecto de losa */
             background-color: rgba(25, 25, 25, 0.8);
-            /* Fondo ligeramente más claro */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            /* Borde más visible */
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
-            /* Sombra más fuerte para contraste */
             transition: all 0.3s ease-in-out;
+            outline: none;
+            /* Elimina el borde de foco por defecto */
         }
 
         .nav-link::before {
-            /* Nuevo borde de acento en el centro */
             content: '';
             position: absolute;
             top: 50%;
@@ -236,10 +235,8 @@
             width: 100%;
             height: 2px;
             background: linear-gradient(to right, transparent, var(--color-accent-stone-blue), transparent);
-            /* Línea azul */
             transform: translateY(-50%) scaleX(0);
             transform-origin: center center;
-            /* Animación desde el centro */
             transition: transform 0.3s ease-out;
             z-index: 1;
         }
@@ -248,42 +245,28 @@
             transform: translateY(-50%) scaleX(0.8);
         }
 
-        /* Se revela una línea */
         .nav-link:hover {
             color: var(--color-text-light);
-            /* Blanco puro al hover */
             background-color: rgba(35, 35, 35, 0.9);
-            /* Fondo un poco más claro al hover */
             border-color: var(--color-accent-stone-blue);
-            /* Borde se ilumina en azul, ahora más visible */
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 15px rgba(106, 134, 185, 0.4);
-            /* Sombra más fuerte y resplandor azul, ahora más claro */
             transform: translateY(-4px);
-            /* Flota más */
         }
 
         .nav-link.active {
             color: var(--color-text-light);
-            /* Blanco puro para el activo */
             background-color: rgba(212, 175, 55, 0.15);
-            /* Fondo dorado semitransparente, ahora más brillante */
             border-color: var(--color-accent-gold);
-            /* Borde activo en oro, ahora más brillante */
             box-shadow: 0 4px 25px rgba(212, 175, 55, 0.7), 0 0 10px rgba(212, 175, 55, 0.9);
-            /* Sombra/resplandor fuerte, ahora más brillante */
             animation: pulse-active-nav 1.5s infinite alternate;
-            /* Animación suave en el activo */
         }
 
         .nav-link.active::before {
             background: linear-gradient(to right, transparent, var(--color-accent-gold), transparent);
-            /* Línea en oro */
             transform: translateY(-50%) scaleX(1);
         }
 
         @keyframes pulse-active-nav {
-
-            /* Animación sutil para el enlace activo */
             0% {
                 box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
             }
@@ -296,11 +279,10 @@
         /* Hero Section - Más solemne y misteriosa */
         .hero-section {
             background-image: url('imagen1.jpg');
-            /* Usar imagen1.jpg directamente aquí */
             background-size: cover;
             background-position: center center;
-            /* Centrar la imagen, no solo bottom */
             background-attachment: fixed;
+            /* Necesario para paralaje con JS */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -308,24 +290,19 @@
             position: relative;
             overflow: hidden;
             border-bottom: 5px solid var(--color-accent-gold);
-            /* Borde final dorado */
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
         }
 
         .hero-overlay {
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.98) 100%);
-            /* Más opaco para envolver más el texto */
             backdrop-filter: blur(8px) grayscale(20%);
-            /* Más blur para un ambiente inmersivo, menos gris */
         }
 
         .hero-content {
             padding: 4rem;
             background-color: rgba(20, 20, 20, 0.98);
-            /* Fondo casi opaco y más oscuro */
             border-radius: 4px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(212, 175, 55, 0.6);
-            /* Caja de hero glow, ahora más brillante */
             border: 1px solid var(--color-accent-gold);
             text-align: center;
         }
@@ -334,26 +311,24 @@
         .gallery-item img {
             transition: all 0.4s ease-in-out;
             filter: grayscale(90%) contrast(70%) brightness(80%);
-            /* Muy apagado, como hallazgo cubierto de polvo */
             border: 2px solid transparent;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-            /* Sombra un poco más fuerte */
             border-radius: 2px;
+            display: block;
+            /* Para evitar espacio extra */
+            width: 100%;
+            /* Asegurar que ocupe todo el ancho del contenedor */
         }
 
         .gallery-item img:hover {
             filter: grayscale(0%) contrast(100%) brightness(100%);
-            /* Se revela a todo color */
             transform: scale(1.05) rotate(0.5deg);
-            /* Efecto más sutil */
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 15px var(--color-accent-gold);
-            /* Resplandor dorado fuerte, ahora más brillante */
             border-color: var(--color-accent-gold);
         }
 
         .section-image {
             transform: rotate(0deg);
-            /* Eliminamos la rotación por defecto para la imagen principal */
             transition: transform 0.4s ease-in-out;
             border-radius: 4px;
         }
@@ -362,30 +337,23 @@
             transform: scale(1.01);
         }
 
-        /* Solo un ligero zoom */
         /* Footer: Columna de cierre */
         footer {
             border-top: 5px solid var(--color-accent-gold);
-            /* Borde final dorado, más brillante */
             background-color: var(--color-void-dark);
             color: var(--color-text-muted);
-            /* Texto atenuado, ahora más claro */
             padding-top: 4rem;
             padding-bottom: 4rem;
             font-size: 0.8em;
             box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.9);
-            /* Sombra más fuerte */
             font-family: 'Cinzel', serif;
-            /* Footer con Cinzel para darle importancia */
             letter-spacing: 0.05em;
         }
 
         /* Pantalla de inicio - Temática revisada */
         #intro-screen {
             background-color: rgba(0, 0, 0, 0.99);
-            /* Más opaco */
             backdrop-filter: blur(15px);
-            /* Más blur */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -398,17 +366,14 @@
             z-index: 1000;
             transition: opacity 0.7s ease-in-out;
             color: var(--color-text-light);
-            /* Asegura que el texto general de la Intro sea legible */
         }
 
         #start-button {
             background-color: var(--color-accent-gold);
-            /* Color del oro, ahora más brillante */
             color: var(--color-void-dark);
             padding: 1rem 2.5rem;
             border: none;
             border-radius: 3px;
-            /* Más angular */
             font-size: 1.5rem;
             text-transform: uppercase;
             font-family: 'Cinzel', serif;
@@ -416,40 +381,35 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
-            /* Sombra más fuerte */
             font-weight: 700;
         }
 
         #start-button:hover {
             background-color: #E2BF65;
-            /* Tono de oro ligeramente más claro (más brillante) */
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 12px var(--color-accent-gold);
-            /* Sombra más fuerte y glow más brillante */
             transform: translateY(-2px);
+        }
+
+        #start-button:active {
+            /* Feedback al clickear */
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         #intro-screen h2 {
             font-family: 'Cinzel', serif;
-            /* clamp para intro-screen h2 */
             font-size: clamp(2.5rem, 10vw, 4.5rem);
             /* Mínimo 2.5rem, ideal 10vw, máximo 4.5rem */
             font-weight: bold;
             margin-bottom: 2rem;
             text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px var(--color-accent-gold);
-            /* Glow de oro más brillante */
             text-transform: uppercase;
-            /* letter-spacing: 0.1em; (eliminado para clamp ya que puede desbordar) */
             letter-spacing: 0.05em;
-            /* Reducimos ligeramente el letter-spacing para mobile */
             animation: pulse-gold 3s infinite alternate;
-            /* Animación de pulsación para el título */
             color: var(--color-text-light);
-            /* Esto asegura que el título de la Intro sea legible */
             text-align: center;
-            /* Aseguramos que el texto esté centrado si hay saltos de línea */
             padding: 0 1rem;
             box-sizing: border-box;
-            /* Asegura que el padding se incluya en el ancho total */
         }
 
         @keyframes pulse-gold {
@@ -470,10 +430,12 @@
             font-family: 'Lora', serif;
             font-size: 1.8rem;
             color: var(--color-text-muted);
-            /* Texto atenuado, ahora más claro */
             margin-bottom: 3rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            /* Sombra un poco más fuerte */
+            text-align: center;
+            /* También centrar este texto */
+            padding: 0 1rem;
+            box-sizing: border-box;
         }
 
         #intro-screen.hidden {
@@ -486,36 +448,96 @@
         .text-xl,
         .text-base {
             color: var(--color-text-light);
-            /* Esto asegura que la gran mayoría del texto del cuerpo sea blanco puro */
         }
 
         .header-sticky-roman {
             border-bottom: 5px solid var(--color-accent-gold);
-            /* Borde dorado para el sticky header */
+            background-color: var(--color-void-dark);
+            /* Asegura que el fondo sea el void dark */
+            backdrop-filter: blur(10px) brightness(80%);
+            /* Ajustado para transparencia */
         }
 
         /* Asegurarse de que el texto de descripción en el hero sea legible */
         .hero-content p.text-xl {
             color: var(--color-text-muted);
-            /* Puede ser blanco o muted, dependiendo de la cercanía al título principal */
-            /* clamp para p en hero-content */
             font-size: clamp(1rem, 4vw, 3em);
             /* Mínimo 1rem, ideal 4vw, máximo 3em */
             padding: 0 1rem;
             box-sizing: border-box;
         }
+
+        /* Scroll Progress Indicator */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            /* Un poco más grueso para visibilidad */
+            width: 0%;
+            background-color: var(--color-accent-gold);
+            z-index: 999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px var(--color-accent-gold), 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Back to Top Button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--color-accent-gold);
+            color: var(--color-void-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(212, 175, 55, 0.5);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 990;
+            font-family: 'Cinzel', serif;
+            /* Para el triángulo o icono */
+            font-weight: bold;
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #back-to-top:hover {
+            background-color: #E2BF65;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.8);
+        }
+
+        #back-to-top:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 
 <body class="antialiased">
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
     <!-- Pantalla de Bienvenida -->
     <div id="intro-screen">
-        <h2 class="hero-content">GUARDIANES DE LA MEMORIA IMPERIAL</h2>
+        <h2>GUARDIANES DE LA MEMORIA IMPERIAL</h2>
         <p>Los ecos de la antigüedad susurran verdades olvidadas.</p>
-        <button id="start-button">ACCEDER A LA FICHA CLASIFICADA</button>
+        <button id="start-button" aria-label="Acceder a la Ficha Clasificada">ACCEDER A LA FICHA CLASIFICADA</button>
     </div>
+
     <!-- Sección Hero: Entrada Principal al Expediente -->
-    <section class="hero-section">
+    <section class="hero-section" id="hero">
         <div class="hero-overlay absolute inset-0"></div>
         <div class="hero-content relative z-10 animate-fade-in-scale">
             <p class="text-xl text-yellow-200 mb-3 uppercase tracking-widest leading-none">
@@ -524,25 +546,32 @@
             <h1 class="main-heading font-bold mb-4 leading-tight">
                 MARCO AURELIO
             </h1>
-            <p class="text-xl md:text-2xl lg:text-3xl font-medium italic">
+            <p class="text-xl font-medium italic">
                 "El conocimiento es el pilar que sostiene nuestro imperio."
             </p>
         </div>
     </section>
+
     <!-- Contenedor Principal de la Página -->
     <div class="container mx-auto max-w-screen-xl">
         <!-- Cabecera de Navegación Sticky -->
         <header
             class="header-sticky-roman sticky top-0 z-20 bg-dark-void bg-opacity-80 backdrop-filter backdrop-blur-xl py-4 shadow-xl mb-16 border-b border-stone-gray">
             <nav class="grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 justify-center">
-                <a href="#perfil" class="nav-link"><span>PERFIL DE AGENTE</span></a>
-                <a href="#habilidades" class="nav-link"><span>HABILIDADES CLAVE</span></a>
-                <a href="#historico" class="nav-link"><span>HISTORIAL OPERATIVO</span></a>
-                <a href="#personalidad" class="nav-link"><span>RASGOS PERSONALES</span></a>
-                <a href="#monstrum" class="nav-link"><span>COMPAÑERO MONSTRUM</span></a>
-                <a href="#galeria" class="nav-link"><span>ARCHIVOS VISUALES</span></a>
+                <a href="#perfil" class="nav-link" aria-label="Ir a Perfil de Agente"><span>PERFIL DE AGENTE</span></a>
+                <a href="#habilidades" class="nav-link" aria-label="Ir a Habilidades Clave"><span>HABILIDADES
+                        CLAVE</span></a>
+                <a href="#historico" class="nav-link" aria-label="Ir a Historial Operativo"><span>HISTORIAL
+                        OPERATIVO</span></a>
+                <a href="#personalidad" class="nav-link" aria-label="Ir a Rasgos Personales"><span>RASGOS
+                        PERSONALES</span></a>
+                <a href="#monstrum" class="nav-link" aria-label="Ir a Compañero Monstrum"><span>COMPAÑERO
+                        MONSTRUM</span></a>
+                <a href="#galeria" class="nav-link" aria-label="Ir a Archivos Visuales"><span>ARCHIVOS
+                        VISUALES</span></a>
             </nav>
         </header>
+
         <main class="space-y-24">
             <!-- Sección: Perfil de Agente -->
             <section id="perfil" class="content-section animate-on-scroll">
@@ -559,11 +588,12 @@
                             la cadena de la verdad imperial; y yo soy su guardián."</p>
                     </div>
                     <div class="relative">
-                        <img src="imagen1.jpg" alt="Marco Aurelio: Detalle del Perfil"
+                        <img src="imagen1.jpg" alt="Marco Aurelio: Detalle del Perfil" loading="lazy"
                             class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image">
                     </div>
                 </div>
             </section>
+
             <!-- Sección: Habilidades Clave -->
             <section id="habilidades" class="content-section animate-on-scroll">
                 <h2 class="section-title title-divider-line text-center">HABILIDADES CLAVE</h2>
@@ -594,6 +624,7 @@
                     </li>
                 </ul>
             </section>
+
             <!-- Sección: Historial Operativo (Origen e Influencias) -->
             <section id="historico" class="content-section animate-on-scroll">
                 <h2 class="section-title title-divider-line text-center">HISTORIAL OPERATIVO</h2>
@@ -612,11 +643,12 @@
                             antigüedad o el peligro de su conocimiento.</p>
                     </div>
                     <div class="relative">
-                        <img src="imagen2.jpg" alt="Historial Operativo de Marco Aurelio"
+                        <img src="imagen2.jpg" alt="Historial Operativo de Marco Aurelio" loading="lazy"
                             class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image transform rotate-1">
                     </div>
                 </div>
             </section>
+
             <!-- Sección: Rasgos Personales (Personalidad y Defectos) -->
             <section id="personalidad" class="content-section animate-on-scroll">
                 <h2 class="section-title title-divider-line text-center">RASGOS PERSONALES</h2>
@@ -636,16 +668,17 @@
                             prevalecen sobre la acción improvisada en el campo.</p>
                     </div>
                     <div class="relative">
-                        <img src="imagen3.jpg" alt="Rasgos Personales de Marco Aurelio"
+                        <img src="imagen3.jpg" alt="Rasgos Personales de Marco Aurelio" loading="lazy"
                             class="w-full h-auto rounded-lg shadow-xl border-4 border-stone-gray section-image transform -rotate-1">
                     </div>
                 </div>
             </section>
+
             <!-- Sección: Compañero Monstrum -->
             <section id="monstrum" class="content-section animate-on-scroll">
                 <h2 class="section-title title-divider-line text-center">COMPAÑERO MONSTRUM: ESENCIA</h2>
                 <div class="flex flex-col items-center mb-8">
-                    <img src="imagen4.jpg" alt="Foto de Esencia el Ivysaur"
+                    <img src="imagen4.jpg" alt="Foto de Esencia el Ivysaur" loading="lazy"
                         class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full shadow-2xl border-4 border-ancient-gold mb-4">
                     <p class="text-3xl md:text-4xl font-bold text-accent">NOMBRE: ESENCIA</p>
                     <p class="text-xl md:text-2xl text-gray-400">ESPECIE: Ivysaur (Clasificación Imperial: BIO-BOTÁNICA
@@ -661,31 +694,33 @@
                     manipular objetos frágiles con una precisión asombrosa.
                 </p>
             </section>
+
             <!-- Sección: Archivos Visuales (Galería) -->
             <section id="galeria" class="content-section animate-on-scroll">
                 <h2 class="section-title title-divider-line text-center">ARCHIVOS VISUALES IMPERIALES</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="gallery-item">
-                        <img src="imagen5.jpg" alt="Archivo Visual 1" class="w-full h-auto rounded-lg">
+                        <img src="imagen5.jpg" alt="Archivo Visual 1" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen6.jpg" alt="Archivo Visual 2" class="w-full h-auto rounded-lg">
+                        <img src="imagen6.jpg" alt="Archivo Visual 2" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen1.jpg" alt="Archivo Visual 3" class="w-full h-auto rounded-lg">
+                        <img src="imagen1.jpg" alt="Archivo Visual 3" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen2.jpg" alt="Archivo Visual 4" class="w-full h-auto rounded-lg">
+                        <img src="imagen2.jpg" alt="Archivo Visual 4" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen3.jpg" alt="Archivo Visual 5" class="w-full h-auto rounded-lg">
+                        <img src="imagen3.jpg" alt="Archivo Visual 5" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                     <div class="gallery-item">
-                        <img src="imagen4.jpg" alt="Archivo Visual 6" class="w-full h-auto rounded-lg">
+                        <img src="imagen4.jpg" alt="Archivo Visual 6" loading="lazy" class="w-full h-auto rounded-lg">
                     </div>
                 </div>
             </section>
         </main>
+
         <!-- Pie de Página -->
         <footer class="mt-20 text-center border-t border-stone-gray pt-12 pb-8">
             <p class="text-sm mb-2">"Las verdades del pasado son los cimientos de nuestro futuro
@@ -696,71 +731,125 @@
                 razón es la guía, pero la cautela es el escudo del explorador.</p>
         </footer>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Volver al inicio de la página">
+        &#9650; <!-- Flecha hacia arriba como carácter HTML -->
+    </button>
+
     <!-- Script para animaciones y navegación -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const introScreen = document.getElementById('intro-screen');
             const startButton = document.getElementById('start-button');
-            // Si la pantalla de inicio existe, manejamos la lógica.
+            const heroSection = document.getElementById('hero');
+            const scrollProgress = document.getElementById('scroll-progress');
+            const backToTopButton = document.getElementById('back-to-top');
+
+            // --- Pantalla de Bienvenida ---
             if (introScreen && startButton) {
-                // Función para ocultar la pantalla de introducción
-                function hideIntroScreen() {
+                startButton.addEventListener('click', () => {
                     introScreen.classList.add('hidden');
-                    // Opcionalmente, puedes aquí disparar otras animaciones o sonidos al cargar la página principal
-                }
-                // Event listener para el botón de inicio
-                startButton.addEventListener('click', hideIntroScreen);
-                // Opcional: Para ocultar la pantalla de inicio directamente si se prefiere no usar el botón
-                // introScreen.classList.add('hidden');
+                    // Opcional: enfocar el body o el hero para iniciar correctamente
+                    // document.body.focus();
+                });
             }
-            // Observador de Intersección para animaciones al hacer scroll
+
+            // --- Observador de Intersección para animaciones al hacer scroll ---
             const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-reveal');
-                        entry.target.classList.add('animated'); /* Para la línea de acento */
+                        entry.target.classList.add('animated'); /* Para las secciones y la línea de acento */
+
+                        // Si es la sección de Habilidades, animar los <li> con un delay escalonado
+                        if (entry.target.id === 'habilidades') {
+                            const listItems = entry.target.querySelectorAll('ul li');
+                            listItems.forEach((item, index) => {
+                                item.style.transitionDelay = `${index * 0.1}s`; // 0.1s de delay por cada item
+                                item.classList.add('animated'); // Causa la transición de li
+                            });
+                        }
                         observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
+
             document.querySelectorAll('.animate-on-scroll').forEach(element => {
                 observer.observe(element);
             });
-            // Lógica para resaltar el enlace de navegación activo
+
+            // --- Lógica para resaltar el enlace de navegación activo ---
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-link');
-            const header = document.querySelector('header'); // Asegúrate de que 'header' se obtenga correctamente
+            const header = document.querySelector('header');
+
             const highlightNavLink = () => {
                 let current = '';
+                const headerOffset = header ? header.offsetHeight : 0;
+                // Usamos window.scrollY para mayor compatibilidad y precisión
+                const scrollY = window.scrollY;
+
                 sections.forEach(section => {
-                    // Calculamos la posición de la sección ajustando por la altura del header si está pegajoso
-                    const headerOffset = header ? header.offsetHeight : 0;
-                    // El "100" es un ajuste adicional para que la sección se considere activa un poco antes de llegar a su top real,
-                    // lo cual es útil cuando el sticky header ocupa espacio.
-                    const sectionTop = section.offsetTop - headerOffset - 100;
-                    const sectionHeight = section.clientHeight;
+                    // Ajuste para que la sección se considere activa cuando el sticky header no la ocupe demasiado
+                    const sectionTop = section.offsetTop - headerOffset - 50; // Ajuste para que el inicio de la sección sea visible
 
-                    // Ajuste de threshold para móviles (sección visible aunque solo una parte)
-                    // Consideramos la sección activa si al menos el 10% (móvil) o 30% (desktop) de ella es visible
-                    const thresholdAdjusted = window.innerWidth < 768 ? sectionHeight * 0.1 : sectionHeight * 0.3;
-
-                    if (window.scrollY >= sectionTop - thresholdAdjusted && window.scrollY < sectionTop + sectionHeight - thresholdAdjusted) {
+                    if (scrollY >= sectionTop && scrollY < section.offsetTop + section.offsetHeight - headerOffset - (window.innerHeight * 0.2)) {
                         current = section.getAttribute('id');
                     }
                 });
+
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    // Comprobamos si el href del enlace contiene el ID de la sección actual
                     if (link.href && link.href.includes(current)) {
                         link.classList.add('active');
                     }
                 });
             };
-            // Event listeners para scroll y carga de página
+
             window.addEventListener('scroll', highlightNavLink);
             highlightNavLink(); // Llama al inicio para fijar la sección activa al cargar la página
-            // Actualizar año en el pie de página
+
+            // --- Scroll Progress Indicator ---
+            const updateScrollProgress = () => {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPosition = window.scrollY;
+                const progressPercentage = (scrollPosition / totalHeight) * 100;
+                scrollProgress.style.width = `${progressPercentage}%`;
+            };
+            window.addEventListener('scroll', updateScrollProgress);
+            updateScrollProgress(); // Llama al inicio para fijar la posición inicial
+
+            // --- Efecto Paralaje Hero Section ---
+            const applyParallax = () => {
+                if (heroSection) {
+                    const scrolled = window.scrollY;
+                    // Ajusta el factor de paralaje para más o menos efecto
+                    heroSection.style.backgroundPositionY = `calc(50% + ${scrolled * 0.3}px)`;
+                }
+            };
+            window.addEventListener('scroll', applyParallax);
+            applyParallax(); // Apply initially
+
+            // --- Back to Top Button ---
+            const toggleBackToTopButton = () => {
+                if (window.scrollY > window.innerHeight / 2) { // Aparece después de scroll un 50% de la altura de la ventana
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            };
+            window.addEventListener('scroll', toggleBackToTopButton);
+            toggleBackToTopButton(); // Check on load
+
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // --- Actualizar año en el pie de página ---
             document.getElementById('currentYear').textContent = new Date().getFullYear();
         });
     </script>
